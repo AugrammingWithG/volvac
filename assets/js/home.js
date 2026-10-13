@@ -1,4 +1,4 @@
-/* Volvac homepage: the machine finder, quote prefill, and the 3D chamber machine in the hero. */
+/* Volvac homepage: camera travel across the plate, readouts, parallax, the machine finder and the quote prefill. */
 (function () {
   'use strict';
 
@@ -8,9 +8,11 @@
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  function sstep(a, b, v) { var t = clamp((v - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); }
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 
-  /* The range, as Volvac's own navigation groups it. Photos are shown only where the photo is of a model in that group. */
+  /* Finder ------------------------------------------------------------- */
+  /* The range as Volvac's own navigation groups it. A photo is shown only where it is of a model in that group. */
   var SITE = 'https://volvac.com.tr/en/', IMG = 'assets/img/volvac/';
   var RANGE = [
     { id: 'vacuum', label: 'In a vacuum bag', url: 'vacuum-packaging-machines/', scales: [
@@ -37,10 +39,9 @@
     ] },
     { id: 'slice', label: 'Sliced first', url: 's-20-2/', scales: [{ label: 'Automatic slicing', models: ['S 20'], photo: ['s20-thumb.png', 'S 20'] }] }
   ];
-
-  var ui = $('#finder-ui'), waysBox = $('#f-ways'), scalesBox = $('#f-scales'), modelsBox = $('#f-models');
+  var waysBox = $('#f-ways'), scalesBox = $('#f-scales'), modelsBox = $('#f-models');
   var count = $('#f-count'), link = $('#f-link'), photo = $('#f-photo'), img = $('#f-img'), cap = $('#f-cap');
-  var state = { way: 0, scale: 2 };
+  var pickd = { way: 0, scale: 2 };
 
   function radio(box, labels, current, pick) {
     box.textContent = '';
@@ -57,9 +58,9 @@
     });
   }
   function draw(focusIn) {
-    var way = RANGE[state.way], scale = way.scales[state.scale];
-    radio(waysBox, RANGE.map(function (w) { return w.label; }), state.way, function (i, key) { state.way = i; state.scale = 0; draw(key && waysBox); });
-    radio(scalesBox, way.scales.map(function (s) { return s.label; }), state.scale, function (i, key) { state.scale = i; draw(key && scalesBox); });
+    var way = RANGE[pickd.way], scale = way.scales[pickd.scale];
+    radio(waysBox, RANGE.map(function (w) { return w.label; }), pickd.way, function (i, key) { pickd.way = i; pickd.scale = 0; draw(key && waysBox); });
+    radio(scalesBox, way.scales.map(function (s) { return s.label; }), pickd.scale, function (i, key) { pickd.scale = i; draw(key && scalesBox); });
     count.textContent = scale.models.length + (scale.models.length === 1 ? ' machine' : ' machines') + '. Pick one to ask for a quote.';
     modelsBox.textContent = '';
     scale.models.forEach(function (m, i) {
@@ -74,86 +75,177 @@
     if (scale.photo) { img.src = IMG + scale.photo[0]; img.alt = 'Volvac ' + scale.photo[1]; cap.textContent = 'Shown: ' + scale.photo[1]; }
     if (focusIn) { var on = $('[aria-checked="true"]', focusIn); if (on) on.focus(); }
   }
-  ui.hidden = false; $('#range').classList.add('is-enhanced'); draw();
-
-  $$('.ways a').forEach(function (a) {
+  $('#finder-ui').hidden = false; $('#rangelist').classList.add('is-enhanced'); draw();
+  $$('[data-way]').forEach(function (a) {
     a.addEventListener('click', function () {
-      for (var i = 0; i < RANGE.length; i++) if (RANGE[i].id === a.dataset.way) { state.way = i; state.scale = 0; draw(); }
+      for (var i = 0; i < RANGE.length; i++) if (RANGE[i].id === a.dataset.way) { pickd.way = i; pickd.scale = 0; draw(); }
     });
   });
-
-  /* Quote: a chosen model goes into the form */
   function ask(model) {
-    var field = $('#q-machine'); field.value = model;
+    $('#q-machine').value = model;
     $('#contact').scrollIntoView({ behavior: still ? 'auto' : 'smooth' });
-    setTimeout(function () { $('#q-name').focus({ preventScroll: true }); }, still ? 0 : 700);
+    setTimeout(function () { $('#q-name').focus({ preventScroll: true }); }, still ? 0 : 800);
   }
   $$('.ask').forEach(function (b) { b.addEventListener('click', function () { ask(b.dataset.model); }); });
 
-  /* The chamber machine: the packaging station of the 3D scene, on its own in the hero */
-  var stage = $('.hero__stage'), canvas = $('#machine'), scene = null;
-  var rv = $('#r-v'), rs = $('#r-s');
-  var pointer = { x: 0.5, y: 0.5 }, view = { yaw: 0, pitch: 0, sx: 0.12, sy: 0.02 }, turn = { yaw: 0, pitch: 0, drag: null };
-  var box = { left: 0, top: 0, w: 1, h: 1 }, seen = true, last = 0, sinceRead = 0, lit = false, hot = false;
+  /* Chrome, reveals and parallax: work with or without 3D -------------- */
+  var stages = $$('.stage[data-key]'), sections = $$('[data-name]');
+  var bar = $('.bar'), scale = $('.scale'), scaleLabel = $('.scale__label'), finder = $('#finder'), main = $('#main');
+  var drifts = $$('[data-drift]'), layers = $$('[data-px]');
+  var vh = window.innerHeight, vw = window.innerWidth, centres = [], marks = [], docH = 1;
 
-  function size() {
-    var r = stage.getBoundingClientRect();
-    view.sx = window.innerWidth > 900 ? 0.12 : 0; // on wide screens the machine sits clear of the headline
-    box = { left: r.left + window.scrollX, top: r.top + window.scrollY, w: Math.max(1, r.width), h: Math.max(1, r.height) };
-    if (scene) scene.resize(box.w, box.h, Math.min(window.devicePixelRatio || 1, 1.5));
+  (function () {
+    var holder = $('.scale__ticks'), n = 80, html = '';
+    for (var i = 0; i <= n; i++) html += '<i class="' + (i % 10 === 0 ? 'l' : i % 5 === 0 ? 'm' : '') + '" style="top:' + (i / n * 100) + '%"></i>';
+    holder.innerHTML = html;
+  })();
+
+  if ('IntersectionObserver' in window && !still) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.18, rootMargin: '0px 0px -6% 0px' });
+    $$('.rv').forEach(function (n, i) { n.style.setProperty('--d', i % 3); io.observe(n); });
+    $$('.machine').forEach(function (n) { io.observe(n); });
+  } else $$('.rv, .machine').forEach(function (n) { n.classList.add('in'); });
+
+  function measure() {
+    vh = window.innerHeight; vw = window.innerWidth;
+    var y = window.scrollY;
+    centres = stages.map(function (s) { var r = s.getBoundingClientRect(); return r.top + y + r.height / 2; });
+    docH = Math.max(1, doc.scrollHeight - vh);
+    marks = centres.map(function (c, i) { return [c, i]; });
+    marks.push([finder.getBoundingClientRect().top + y + vh * 0.35, stages.length]); // the camera lifts away as the finder arrives
   }
-  function put(node, text, settle) { if (node.textContent !== text) node.textContent = text; node.style.setProperty('--w', settle ? 760 : 380); }
-  function loop(now) {
-    requestAnimationFrame(loop);
-    var dt = Math.min(0.05, (now - last) / 1000 || 0.016); last = now;
-    if (!seen || document.hidden) return;
-    var ease = 1 - Math.exp(-dt * (turn.drag ? 16 : 4.5));
-    view.yaw += (turn.yaw - view.yaw) * ease; view.pitch += (turn.pitch - view.pitch) * ease;
-    scene.frame(dt, 5, pointer, still, view);
-    if (!lit) { lit = true; body.classList.add('is-lit'); }
-    sinceRead += dt;
-    if (sinceRead > 0.07) {
-      sinceRead = 0; var s = scene.state;
-      put(rv, (s.packV < -0.005 ? '−' : '') + Math.abs(s.packV).toFixed(2) + ' bar', s.packSettle);
-      put(rs, s.packS, s.packSettle);
+  function keyAt(y) {
+    var c = y + vh / 2;
+    if (c <= marks[0][0]) return 0;
+    for (var i = 0; i < marks.length - 1; i++) {
+      var a = marks[i], b = marks[i + 1];
+      if (c <= b[0]) return a[1] + (b[1] - a[1]) * (c - a[0]) / (b[0] - a[0]);
+    }
+    return marks[marks.length - 1][1];
+  }
+  function sectionAt(y) {
+    for (var i = sections.length - 1; i >= 0; i--) if (sections[i].getBoundingClientRect().top <= y) return sections[i];
+    return sections[0];
+  }
+  function chrome() {
+    var y = window.scrollY, mid = sectionAt(vh / 2);
+    bar.dataset.tone = sectionAt(48).dataset.tone;
+    scale.dataset.tone = mid.dataset.tone;
+    if (scaleLabel.textContent !== mid.dataset.name) scaleLabel.textContent = mid.dataset.name;
+    scale.style.setProperty('--p', clamp(y / docH, 0, 1));
+    if (still) return;
+    // Parallax: layers move against the scroll by a share of their distance from the middle of the screen.
+    for (var i = 0; i < layers.length; i++) {
+      var r = layers[i].parentNode.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > vh + 200) continue;
+      layers[i].style.setProperty('--y', ((r.top + r.height / 2 - vh / 2) * -layers[i].dataset.px).toFixed(1));
+    }
+    for (var j = 0; j < drifts.length; j++) {
+      var d = drifts[j].getBoundingClientRect();
+      if (d.bottom < -100 || d.top > vh + 100) continue;
+      drifts[j].style.setProperty('--x', ((d.top - vh) * 0.35 * drifts[j].dataset.drift).toFixed(1));
     }
   }
-  function local(e) { return { x: e.clientX + window.scrollX - box.left, y: e.clientY + window.scrollY - box.top }; }
 
+  /* The plate ---------------------------------------------------------- */
+  var scene = null, canvas = $('#plate');
+  var pointer = { x: 0.5, y: 0.5 }, view = { yaw: 0, pitch: 0 }, turn = { yaw: 0, pitch: 0, drag: null }, dim = 1;
+  var keySm = 0, last = 0, lit = false, sinceRead = 0, over = null, hotButton = -1, opening = false;
+  var pace = { t: 0, ms: [], wait: 3, down: true };
+
+  var R = {};
+  ['v', 's', 'tn', 'ts', 'kt', 'ks', 'sn', 'sr'].forEach(function (k) { R[k] = $('#r-' + k); });
+  function put(node, text, settle) { if (node.textContent !== text) node.textContent = text; node.style.setProperty('--w', settle ? 760 : 380); }
+  function readouts(s) {
+    put(R.v, (s.packV < -0.005 ? '−' : '') + Math.abs(s.packV).toFixed(2) + ' bar', s.packSettle);
+    put(R.s, s.packS, s.packSettle);
+    put(R.tn, s.trayN + ' of 4', s.traySettle); put(R.ts, s.trayS, s.traySettle);
+    put(R.kt, Math.round(s.tankT) + ' °C', s.tankSettle); put(R.ks, s.tankS, s.tankSettle);
+    put(R.sn, String(s.sliceN), s.sliceSettle); put(R.sr, s.sliceR + ' rpm', s.sliceSettle);
+  }
+  function reveal() { doc.classList.remove('intro'); }
+
+  // Give up lens quality before frames: if the median frame is slow and the GPU is the reason, step down.
+  function govern(raw) {
+    if (raw > 0.25 || !pace.down) return;
+    pace.ms.push(raw * 1000); pace.t += raw;
+    if (pace.t < 1.5) return;
+    var med = pace.ms.sort(function (a, b) { return a - b; })[pace.ms.length >> 1], gpu = scene.gpuTime();
+    pace.ms = []; pace.t = 0;
+    if (pace.wait > 0) { pace.wait--; return; }
+    if (med > 24 && (gpu < 0 || gpu > 12)) { if (!scene.step(-1)) pace.down = false; pace.wait = 1; }
+  }
+
+  function loop(now) {
+    requestAnimationFrame(loop);
+    var raw = (now - last) / 1000 || 0.016, dt = Math.min(0.05, raw); last = now;
+    chrome();
+    if (!scene) return;
+    var k = keyAt(window.scrollY);
+    keySm = still ? k : keySm + (k - keySm) * (1 - Math.exp(-dt * 5.5));
+    var viewC = window.scrollY + vh / 2;
+    stages.forEach(function (s, i) {
+      var d = Math.abs(centres[i] - viewC) / vh;
+      if (i === 0 && viewC < centres[0]) d = 0;
+      s.firstElementChild.style.setProperty('--f', (1 - sstep(0.2, 0.58, d)).toFixed(3));
+    });
+    if (finder.getBoundingClientRect().top <= 0) return; // the plate is covered
+    var ease = 1 - Math.exp(-dt * (turn.drag ? 16 : 4.5));
+    view.yaw += (turn.yaw - view.yaw) * ease; view.pitch += (turn.pitch - view.pitch) * ease;
+    var dimTo = turn.drag && turn.drag.far > 8 ? 0.08 : 1;
+    if (Math.abs(dimTo - dim) > 0.002) { dim += (dimTo - dim) * (1 - Math.exp(-dt * 9)); main.style.setProperty('--dim', dim.toFixed(3)); }
+    scene.frame(dt, keySm, pointer, still, view);
+    if (!lit) { lit = true; body.classList.add('is-lit'); if (opening) { scene.open(); setTimeout(reveal, 900); } }
+    govern(raw);
+    if (fine) {
+      var b = over && !turn.drag ? scene.pick(over.x, over.y) : -1;
+      if (b !== hotButton) { hotButton = b; scene.hover(b >= 0); body.classList.toggle('is-press', b >= 0); }
+    }
+    sinceRead += dt;
+    if (sinceRead > 0.07) { sinceRead = 0; readouts(scene.state); }
+  }
+  function resize() { measure(); if (scene) scene.resize(vw, vh, window.devicePixelRatio); }
   function start() {
     try {
       var t = document.createElement('canvas');
-      if (window.THREE && window.QMScene && (t.getContext('webgl2') || t.getContext('webgl'))) scene = window.QMScene.create(canvas, { light: true });
+      if (window.THREE && window.QMScene && (t.getContext('webgl2') || t.getContext('webgl'))) scene = window.QMScene.create(canvas, { volvac: true, lens: fine || window.innerWidth > 900 });
     } catch (e) { scene = null; }
-    if (!scene) return;
-    doc.classList.add('has-3d'); size();
-    if ('IntersectionObserver' in window) new IntersectionObserver(function (en) { seen = en[0].isIntersecting; }).observe(stage);
-    window.addEventListener('resize', size); window.addEventListener('load', size);
-    $('#run').addEventListener('click', function () { scene.press(5); });
-
-    canvas.addEventListener('pointerdown', function (e) {
-      if (e.pointerType === 'mouse' && e.button !== 0) return;
-      turn.drag = { id: e.pointerId, x: e.clientX, y: e.clientY, far: 0 }; body.classList.add('is-grabbing');
-    });
-    window.addEventListener('pointermove', function (e) {
-      var p = local(e); pointer.x = clamp(p.x / box.w, 0, 1); pointer.y = clamp(p.y / box.h, 0, 1);
-      var d = turn.drag;
-      if (d && e.pointerId === d.id) {
-        var dx = e.clientX - d.x, dy = e.clientY - d.y; d.far = Math.max(d.far, Math.abs(dx) + Math.abs(dy));
-        turn.yaw = clamp(-dx / box.w * 3, -1.2, 1.2); turn.pitch = clamp(-dy / box.h * 1.1, -0.3, 0.2);
-      } else if (fine && e.target === canvas) {
-        var on = scene.pick(p.x, p.y) >= 0;
-        if (on !== hot) { hot = on; scene.hover(on); canvas.style.cursor = on ? 'pointer' : ''; }
-      }
-    }, { passive: true });
-    function drop(e) {
-      var d = turn.drag; if (!d || e.pointerId !== d.id) return;
-      turn.drag = null; turn.yaw = turn.pitch = 0; body.classList.remove('is-grabbing');
-      if (e.type === 'pointerup' && d.far < 8) { var p = local(e); if (scene.pick(p.x, p.y) >= 0) scene.press(5); }
-    }
-    window.addEventListener('pointerup', drop); window.addEventListener('pointercancel', drop);
+    if (scene) doc.classList.add('has-3d');
+    resize();
+    keySm = keyAt(window.scrollY);
+    opening = !!scene && !still && window.scrollY < 8 && doc.classList.contains('intro');
+    if (!opening) reveal();
     requestAnimationFrame(loop);
   }
+
+  window.addEventListener('resize', resize);
+  window.addEventListener('load', measure);
+  window.addEventListener('touchmove', function (e) { var t = e.touches[0]; if (t) { pointer.x = t.clientX / vw; pointer.y = t.clientY / vh; } }, { passive: true });
+
+  /* Hands on the plate: drag open ground to turn the view, press the red buttons on the machines */
+  function openPlate(e) { return !!(e.target.classList && e.target.classList.contains('stage')); }
+  main.addEventListener('pointerdown', function (e) {
+    if (!scene || !openPlate(e) || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    turn.drag = { id: e.pointerId, x: e.clientX, y: e.clientY, far: 0 }; body.classList.add('is-grabbing');
+  });
+  main.addEventListener('mousedown', function (e) { if (scene && openPlate(e)) e.preventDefault(); });
+  window.addEventListener('pointermove', function (e) {
+    pointer.x = e.clientX / vw; pointer.y = e.clientY / vh;
+    over = e.pointerType === 'mouse' && openPlate(e) ? { x: e.clientX, y: e.clientY } : null;
+    var d = turn.drag;
+    if (!d || e.pointerId !== d.id) return;
+    var dx = e.clientX - d.x, dy = e.clientY - d.y; d.far = Math.max(d.far, Math.abs(dx) + Math.abs(dy));
+    turn.yaw = clamp(-dx / vw * 3, -1.1, 1.1); turn.pitch = clamp(-dy / vh * 1.1, -0.3, 0.2);
+  }, { passive: true });
+  function drop(e) {
+    var d = turn.drag; if (!d || e.pointerId !== d.id) return;
+    turn.drag = null; turn.yaw = turn.pitch = 0; body.classList.remove('is-grabbing');
+    if (e.type === 'pointerup' && d.far < 8) { var s = scene.pick(e.clientX, e.clientY); if (s >= 0) scene.press(s); }
+  }
+  window.addEventListener('pointerup', drop); window.addEventListener('pointercancel', drop);
+  $$('[data-run]').forEach(function (b) { b.addEventListener('click', function () { if (scene) scene.press(+b.dataset.run); }); });
 
   var fonts = document.fonts && document.fonts.load ? Promise.all([document.fonts.load('600 40px Archivo'), document.fonts.load('700 40px Archivo')]) : Promise.resolve();
   Promise.race([fonts, new Promise(function (r) { setTimeout(r, 1500); })]).then(start, start);
