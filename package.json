@@ -1,0 +1,8 @@
+{
+  "name": "volvac-concept",
+  "private": true,
+  "description": "Volvac homepage, brand guide, social posts and costing document. Static files, no build step.",
+  "scripts": {
+    "dev": "npx --yes serve@14 -l 5173 ."
+  }
+}
