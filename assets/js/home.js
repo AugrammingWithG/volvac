@@ -42,6 +42,9 @@
   var waysBox = $('#f-ways'), scalesBox = $('#f-scales'), modelsBox = $('#f-models');
   var count = $('#f-count'), link = $('#f-link'), photo = $('#f-photo'), img = $('#f-img'), cap = $('#f-cap');
   var pickd = { way: 0, scale: 2 };
+  // The finder's 3D window: which machine on the plate does each way of packing, and what it is called there.
+  var STATION = { vacuum: [0, 5, 'chamber vacuum machine'], tray: [1, 1, 'tray sealer'], skin: [1, 1, 'tray sealer'], thermo: [1, 1, 'tray sealer'], shrink: [2, 2, 'dip tank'], slice: [3, 3, 'slicer'] };
+  var fview = null; // set once the finder's 3D window is running
 
   function radio(box, labels, current, pick) {
     box.textContent = '';
@@ -71,9 +74,15 @@
     });
     link.href = SITE + (scale.url || way.url);
     link.textContent = 'See ' + scale.label.toLowerCase() + ' models on volvac.com.tr';
-    photo.hidden = !scale.photo;
+    photo.hidden = !scale.photo && !fview;
+    if (fview) {
+      var st = STATION[way.id];
+      if (fview.key !== st[0]) { fview.key = st[0]; fview.tick = st[1]; fview.rerun = 1.1; }
+      img.hidden = !scale.photo;
+      cap.textContent = 'Illustrative 3D ' + st[2] + (scale.photo ? '. Photo: Volvac ' + scale.photo[1] : '') + '.';
+    }
     if (scale.photo && img.getAttribute('src') !== IMG + scale.photo[0]) { photo.classList.remove('swap'); void photo.offsetWidth; photo.classList.add('swap'); }
-    if (scale.photo) { img.src = IMG + scale.photo[0]; img.alt = 'Volvac ' + scale.photo[1]; cap.textContent = 'Shown: ' + scale.photo[1]; }
+    if (scale.photo) { img.src = IMG + scale.photo[0]; img.alt = 'Volvac ' + scale.photo[1]; if (!fview) cap.textContent = 'Shown: ' + scale.photo[1]; }
     if (focusIn) { var on = $('[aria-checked="true"]', focusIn); if (on) on.focus(); }
   }
   $('#finder-ui').hidden = false; $('#rangelist').classList.add('is-enhanced'); draw();
@@ -308,6 +317,50 @@
   }
   window.addEventListener('pointerup', drop); window.addEventListener('pointercancel', drop);
   $$('[data-run]').forEach(function (b) { b.addEventListener('click', function () { if (scene) scene.press(+b.dataset.run); }); });
+
+  /* The finder's 3D window: a second view of the same plate, started when the finder comes near, drawn only while seen */
+  function finder3d() {
+    var cv = $('#f-3d'), box = $('#f-photo'), fs = null, seen = false, t = 0, prev = 0;
+    var turn = { yaw: 0, pitch: 0, drag: null }, view = { yaw: 0, pitch: 0, sx: 0, sy: 0.02, zoom: 0.62 }, pt = { x: 0.5, y: 0.5 };
+    try { fs = window.QMScene.create(cv, { volvac: true }); } catch (e) { return; }
+    doc.classList.add('f3d');
+    fview = { key: STATION[RANGE[pickd.way].id][0], tick: STATION[RANGE[pickd.way].id][1], k: STATION[RANGE[pickd.way].id][0], rerun: 0 };
+    function size() { var r = box.getBoundingClientRect(); view.sy = r.width < 560 ? 0.13 : 0.02; view.zoom = r.width < 560 ? 0.7 : 0.62; fs.resize(Math.max(1, r.width), Math.max(1, r.height), Math.min(window.devicePixelRatio || 1, 1.5)); }
+    draw(); size(); window.addEventListener('resize', size);
+    new IntersectionObserver(function (en) { seen = en[0].isIntersecting; }).observe(box);
+    cv.addEventListener('pointerdown', function (e) { turn.drag = { id: e.pointerId, x: e.clientX, y: e.clientY, far: 0 }; cv.classList.add('is-grabbing'); });
+    window.addEventListener('pointermove', function (e) {
+      var d = turn.drag; if (!d || e.pointerId !== d.id) return;
+      var r = box.getBoundingClientRect(), dx = e.clientX - d.x, dy = e.clientY - d.y; d.far = Math.max(d.far, Math.abs(dx) + Math.abs(dy));
+      turn.yaw = clamp(-dx / r.width * 3, -1.3, 1.3); turn.pitch = clamp(-dy / r.height * 1.1, -0.3, 0.25);
+    }, { passive: true });
+    function drop(e) {
+      var d = turn.drag; if (!d || e.pointerId !== d.id) return;
+      turn.drag = null; turn.yaw = turn.pitch = 0; cv.classList.remove('is-grabbing');
+      if (e.type === 'pointerup' && d.far < 8) { var r = box.getBoundingClientRect(), s = fs.pick(e.clientX - r.left, e.clientY - r.top); if (s >= 0) fs.press(s); }
+    }
+    window.addEventListener('pointerup', drop); window.addEventListener('pointercancel', drop);
+    (function loop(now) {
+      requestAnimationFrame(loop);
+      var dt = Math.min(0.05, (now - prev) / 1000 || 0.016); prev = now;
+      if (!seen || document.hidden) return;
+      t += dt;
+      fview.k = still ? fview.key : fview.k + (fview.key - fview.k) * (1 - Math.exp(-dt * 2.6));
+      if (fview.rerun > 0) { fview.rerun -= dt; if (fview.rerun <= 0) fs.press(fview.tick); } // run the machine again once the camera arrives
+      var idle = turn.drag || still ? 0 : Math.sin(t * 0.35) * 0.22; // a slow turntable sway when left alone
+      var ease = 1 - Math.exp(-dt * (turn.drag ? 16 : 3.5));
+      view.yaw += (turn.yaw + idle - view.yaw) * ease; view.pitch += (turn.pitch - view.pitch) * ease;
+      fs.frame(dt, fview.k, pt, true, view);
+    })(0);
+  }
+  if ('IntersectionObserver' in window) {
+    var near = new IntersectionObserver(function (en) {
+      if (!en[0].isIntersecting) return;
+      near.disconnect();
+      try { var tc = document.createElement('canvas'); if (window.THREE && window.QMScene && (tc.getContext('webgl2') || tc.getContext('webgl'))) finder3d(); } catch (e) {}
+    }, { rootMargin: '600px 0px' });
+    near.observe($('#finder'));
+  }
 
   var fonts = document.fonts && document.fonts.load ? Promise.all([document.fonts.load('600 40px Archivo'), document.fonts.load('700 40px Archivo')]) : Promise.resolve();
   Promise.race([fonts, new Promise(function (r) { setTimeout(r, 1500); })]).then(start, start);

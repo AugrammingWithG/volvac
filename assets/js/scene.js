@@ -1053,7 +1053,7 @@
       }
 
       // The offset from target to camera carries the phone pull-back, the opening, and any turn the visitor gives it.
-      tmp.subVectors(cp, ct).multiplyScalar((1 + 1.05 * portrait) * (1 + 0.9 * e));
+      tmp.subVectors(cp, ct).multiplyScalar((1 + 1.05 * portrait) * (1 + 0.9 * e) * (view && view.zoom || 1)); // a page can bring the camera closer
       var yaw = (view ? view.yaw : 0) + 0.55 * e, pitch = view ? view.pitch : 0;
       if (yaw) tmp.applyAxisAngle(UP, yaw);
       if (pitch) { side.crossVectors(UP, tmp).normalize(); tmp.applyAxisAngle(side, pitch); }
