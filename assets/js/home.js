@@ -72,6 +72,7 @@
     link.href = SITE + (scale.url || way.url);
     link.textContent = 'See ' + scale.label.toLowerCase() + ' models on volvac.com.tr';
     photo.hidden = !scale.photo;
+    if (scale.photo && img.getAttribute('src') !== IMG + scale.photo[0]) { photo.classList.remove('swap'); void photo.offsetWidth; photo.classList.add('swap'); }
     if (scale.photo) { img.src = IMG + scale.photo[0]; img.alt = 'Volvac ' + scale.photo[1]; cap.textContent = 'Shown: ' + scale.photo[1]; }
     if (focusIn) { var on = $('[aria-checked="true"]', focusIn); if (on) on.focus(); }
   }
@@ -91,7 +92,8 @@
   /* Chrome, reveals and parallax: work with or without 3D -------------- */
   var stages = $$('.stage[data-key]'), sections = $$('[data-name]');
   var bar = $('.bar'), scale = $('.scale'), scaleLabel = $('.scale__label'), finder = $('#finder'), main = $('#main');
-  var drifts = $$('[data-drift]'), layers = $$('[data-px]');
+  var drifts = $$('[data-drift]'), layers = $$('[data-px]'), zoom = $('.about__window img');
+  var lastY = window.scrollY, lastT = 0, vel = 0;
   var vh = window.innerHeight, vw = window.innerWidth, centres = [], marks = [], docH = 1;
 
   (function () {
@@ -101,12 +103,62 @@
   })();
 
   if ('IntersectionObserver' in window && !still) {
+    // Headings in the later sections rise word by word out of a mask. The text stays whole for screen readers.
+    $$('.solid h2').forEach(function (h) {
+      var n = 0;
+      function wrap(node) { var w = el('span', 'w'), inner = el('span'); inner.style.setProperty('--wi', n++); w.appendChild(inner); h.insertBefore(w, node); inner.appendChild(node); }
+      Array.prototype.slice.call(h.childNodes).forEach(function (c) {
+        if (c.nodeType === 3) {
+          c.textContent.split(/(\s+)/).forEach(function (part) {
+            if (!part) return;
+            var t = document.createTextNode(part); h.insertBefore(t, c);
+            if (!/^\s+$/.test(part)) wrap(t);
+          });
+          h.removeChild(c);
+        } else if (c.nodeName !== 'BR') wrap(c);
+      });
+      h.classList.remove('rv'); h.classList.add('split');
+    });
+    // List rows slide in one after another.
+    $$('.foods__list li, .facts li, .news__list li, .lines li').forEach(function (li) {
+      li.parentNode.classList.remove('rv');
+      li.classList.add('rv', 'rv--x'); li.style.setProperty('--d', Array.prototype.indexOf.call(li.parentNode.children, li));
+    });
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
     }, { threshold: 0.18, rootMargin: '0px 0px -6% 0px' });
-    $$('.rv').forEach(function (n, i) { n.style.setProperty('--d', i % 3); io.observe(n); });
-    $$('.machine').forEach(function (n) { io.observe(n); });
-  } else $$('.rv, .machine').forEach(function (n) { n.classList.add('in'); });
+    $$('.rv').forEach(function (n, i) { if (!n.style.getPropertyValue('--d')) n.style.setProperty('--d', i % 3); io.observe(n); });
+    $$('.machine, .split').forEach(function (n) { io.observe(n); });
+    // The red seal line draws across each section as it arrives.
+    var seal = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('sealed'); seal.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -30% 0px' });
+    $$('.solid').forEach(function (s) { seal.observe(s); });
+    // Real figures count up once, from the first number of the same length so the line never shifts.
+    var counter = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        counter.unobserve(e.target);
+        var node = e.target, to = +node.dataset.to, from = Math.pow(10, String(to).length - 1), t0 = performance.now();
+        node.textContent = from;
+        (function step(now) { var p = Math.min(1, (now - t0) / 1700); node.textContent = Math.round(from + (to - from) * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(step); })(t0);
+      });
+    }, { threshold: 1 });
+    $$('.count').forEach(function (c) { counter.observe(c); });
+  } else {
+    $$('.rv, .machine').forEach(function (n) { n.classList.add('in'); });
+    $$('.solid').forEach(function (n) { n.classList.add('sealed'); });
+  }
+
+  // Product photos lean toward the pointer.
+  if (fine && !still) $$('.machine__photo').forEach(function (p) {
+    p.addEventListener('pointermove', function (e) {
+      var r = p.getBoundingClientRect();
+      p.style.setProperty('--ry', (((e.clientX - r.left) / r.width - 0.5) * 7).toFixed(2) + 'deg');
+      p.style.setProperty('--rx', (-((e.clientY - r.top) / r.height - 0.5) * 6).toFixed(2) + 'deg');
+    });
+    p.addEventListener('pointerleave', function () { p.style.setProperty('--rx', '0deg'); p.style.setProperty('--ry', '0deg'); });
+  });
 
   function measure() {
     vh = window.innerHeight; vw = window.innerWidth;
@@ -136,6 +188,15 @@
     if (scaleLabel.textContent !== mid.dataset.name) scaleLabel.textContent = mid.dataset.name;
     scale.style.setProperty('--p', clamp(y / docH, 0, 1));
     if (still) return;
+    // Scroll speed, smoothed: the marquee rows lean into it.
+    var now = performance.now(), dtc = lastT ? Math.max(1, now - lastT) : 16;
+    vel += ((y - lastY) / dtc - vel) * 0.16; lastY = y; lastT = now;
+    var lean = clamp(vel * 5, -9, 9).toFixed(2);
+    // The factory shot starts close and pulls back as it crosses the screen.
+    if (zoom) {
+      var zr = zoom.parentNode.getBoundingClientRect();
+      if (zr.bottom > 0 && zr.top < vh) zoom.style.setProperty('--s', (1.22 - 0.22 * clamp((vh - zr.top) / (vh + zr.height), 0, 1)).toFixed(4));
+    }
     // Parallax: layers move against the scroll by a share of their distance from the middle of the screen.
     for (var i = 0; i < layers.length; i++) {
       var r = layers[i].parentNode.getBoundingClientRect();
@@ -146,6 +207,7 @@
       var d = drifts[j].getBoundingClientRect();
       if (d.bottom < -100 || d.top > vh + 100) continue;
       drifts[j].style.setProperty('--x', ((d.top - vh) * 0.35 * drifts[j].dataset.drift).toFixed(1));
+      drifts[j].style.setProperty('--k', lean);
     }
   }
 

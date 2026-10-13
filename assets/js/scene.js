@@ -140,7 +140,8 @@
     })();
 
     var scene = new T.Scene();
-    var BG_INK = new T.Color(0x2c0407), BG_STONE = new T.Color(opts.light ? 0xf1f2f3 : 0xd2d5d4), BG_BLACK = new T.Color(0x0a0b0d);
+    var BG_INK = new T.Color(0x2c0407), BG_STONE = new T.Color(opts.light || opts.volvac ? 0xeef0f1 : 0xd2d5d4), BG_BLACK = new T.Color(0x0a0b0d);
+    if (opts.volvac) BG_INK.copy(BG_STONE); // white leads: no coloured ground behind the hero
     scene.background = BG_INK.clone();
     scene.fog = new T.Fog(BG_INK.clone(), 42, 112);
 
@@ -386,7 +387,7 @@
     /* The plate */
     var speck = speckleTexture();
     speck.repeat.set(44, 24);
-    var plate = new T.Mesh(new T.PlaneGeometry(440, 240), new T.MeshStandardMaterial({ color: opts.light ? 0xd9dcdd : 0xbfc3c3, map: speck, roughness: 0.46, metalness: 0 }));
+    var plate = new T.Mesh(new T.PlaneGeometry(440, 240), new T.MeshStandardMaterial({ color: opts.light || opts.volvac ? 0xdadddf : 0xbfc3c3, map: speck, roughness: 0.46, metalness: 0 }));
     plate.rotation.x = -PI / 2; plate.position.set(110, 0, 0); plate.receiveShadow = true; scene.add(plate);
 
     // Engineer's blue: an opaque sheet where the plate has been wiped, and a narrow see-through strip where the
@@ -410,7 +411,7 @@
       var w = edge - INK.from;
       ink.scale.x = w; ink.position.set(INK.from + w / 2, 0.004, 0); speckInk.repeat.set(w / 10, 24);
       inkDry.position.set(edge + INK.dry / 2 - 0.04, 0.004, 0);
-      ink.visible = inkDry.visible = shown !== false;
+      ink.visible = inkDry.visible = shown !== false && !opts.volvac;
     }
     inkTo(INK.to);
 

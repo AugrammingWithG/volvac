@@ -20,6 +20,7 @@
   --graphite: #12161b;
   --graphite-2: #363e48;
   --ash: #a5acb2;
+  --white: #ffffff;
 
   --gutter: clamp(1.25rem, 5.5vw, 6rem);
   --rail: 3.25rem;
@@ -33,13 +34,13 @@
 }
 [data-tone="ink"] { --fg: var(--chalk); --fg-2: var(--rose); --hair: rgb(242 245 251 / 0.34); --live: var(--chalk); --on-live: var(--red-deep); }
 [data-tone="black"] { --fg: var(--chalk); --fg-2: var(--ash); --hair: rgb(242 245 251 / 0.24); --live: var(--red); --on-live: var(--chalk); }
-[data-tone="stone"], [data-tone="steel"] { --fg: var(--graphite); --fg-2: var(--graphite-2); --hair: rgb(18 22 27 / 0.28); --live: var(--red); --on-live: var(--chalk); }
+[data-tone="stone"], [data-tone="steel"], [data-tone="white"] { --fg: var(--graphite); --fg-2: var(--graphite-2); --hair: rgb(18 22 27 / 0.28); --live: var(--red); --on-live: var(--chalk); }
 
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-snap-type: y proximity; scrollbar-color: var(--red) var(--black); -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
-  background: var(--red-deep);
+  background: var(--white);
   color: var(--graphite);
   font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
   font-stretch: 100%;
@@ -144,8 +145,8 @@ h2 { font-size: clamp(2rem, 3.5vw, 3.5rem); }
 .bar__logo img { position: absolute; inset: 0; width: 100%; height: 100%; transition: opacity 0.5s ease; }
 .bar .logo--red { opacity: 1; }
 .bar .logo--white { opacity: 0; }
-.bar[data-tone="ink"] .logo--red, .bar[data-tone="black"] .logo--red { opacity: 0; }
-.bar[data-tone="ink"] .logo--white, .bar[data-tone="black"] .logo--white { opacity: 1; }
+.bar[data-tone="black"] .logo--red { opacity: 0; }
+.bar[data-tone="black"] .logo--white { opacity: 1; }
 .bar__nav { display: flex; gap: 1.6rem; }
 .bar__nav a { font-size: 0.875rem; text-decoration: none; padding: 0.5rem 0; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size 0.45s var(--ease); }
 .bar__nav a:hover { background-size: 100% 1px; }
@@ -172,6 +173,7 @@ h2 { font-size: clamp(2rem, 3.5vw, 3.5rem); }
 }
 .stage[data-tone="ink"] { background: var(--red); }
 .stage[data-tone="stone"] { background: var(--stone); }
+.stage[data-tone="white"] { background: var(--steel); }
 .has-3d .stage { background: none; cursor: grab; touch-action: pan-y; }
 .has-3d .stage > * { cursor: auto; }
 .is-press .stage { cursor: pointer; }
@@ -226,11 +228,12 @@ html:not(.has-3d) .stage__body, html:not(.has-3d) .stage--hero .stage__body { ma
 .solid[data-tone="steel"] { background: var(--steel); }
 .solid[data-tone="stone"] { background: var(--stone); }
 .solid[data-tone="ink"] { background: var(--red); }
+.solid[data-tone="white"] { background: var(--white); }
 
 /* Reveal on arrival. Visible by default; only armed when scripts run. */
 .js .rv { opacity: 0; transform: translateY(2rem); transition: opacity 0.9s ease-out, transform 1.1s var(--ease); transition-delay: calc(var(--d, 0) * 80ms); }
 .js .rv.in { opacity: 1; transform: none; }
-.js .machine__photo { clip-path: inset(0 100% 0 0); transition: clip-path 1.3s var(--ease); }
+.js .machine__photo { clip-path: inset(0 100% 0 0); transition: clip-path 1.3s var(--ease), transform 0.7s var(--ease); }
 .js .machine--flip .machine__photo { clip-path: inset(0 0 0 100%); }
 .js .machine.in .machine__photo { clip-path: inset(0 0 0 0); }
 
@@ -261,7 +264,7 @@ html:not(.has-3d) .stage__body, html:not(.has-3d) .stage--hero .stage__body { ma
 /* The red band: model names and markets drift past the statement */
 .band { padding-block: clamp(4rem, 11vh, 7rem); overflow: hidden; }
 .band__say { padding: clamp(2.5rem, 7vh, 4.5rem) var(--gutter); font-size: clamp(2.2rem, 5vw, 5rem); }
-.band__row { white-space: nowrap; font-stretch: 62%; font-weight: 700; font-size: clamp(2.6rem, 7vw, 6.5rem); line-height: 1; text-transform: uppercase; color: var(--red-deep); transform: translate3d(calc(var(--x, 0) * 1px), 0, 0); will-change: transform; }
+.band__row { white-space: nowrap; font-stretch: 62%; font-weight: 700; font-size: clamp(2.6rem, 7vw, 6.5rem); line-height: 1; text-transform: uppercase; color: var(--stone); transform: translate3d(calc(var(--x, 0) * 1px), 0, 0) skewX(calc(var(--k, 0) * 1deg)); will-change: transform; }
 .band__row[data-drift="1"] { margin-left: -40vw; }
 
 /* Highlighted machines */
@@ -286,7 +289,7 @@ html:not(.has-3d) .stage__body, html:not(.has-3d) .stage--hero .stage__body { ma
 /* About: the factory seen through a window that moves slower than the page */
 .about { padding-top: 0; }
 .about__window { height: clamp(16rem, 58vh, 36rem); overflow: hidden; }
-.about__window img { display: block; width: 100%; height: 140%; object-fit: cover; transform: translate3d(0, calc(var(--y, 0) * 1px - 14%), 0); will-change: transform; }
+.about__window img { display: block; width: 100%; height: 140%; object-fit: cover; transform: translate3d(0, calc(var(--y, 0) * 1px - 14%), 0) scale(var(--s, 1)); will-change: transform; }
 .about__grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(2.5rem, 7vw, 7rem); padding-top: clamp(3.5rem, 9vh, 6rem); }
 .about__grid .lede + p { margin-top: 1.1rem; max-width: 34rem; color: var(--fg-2); }
 .facts { border-bottom: 1px solid var(--hair); align-self: start; }
@@ -314,11 +317,29 @@ html:not(.has-3d) .stage__body, html:not(.has-3d) .stage--hero .stage__body { ma
 .lines a:hover { text-decoration-color: currentColor; }
 .quote { display: grid; gap: 1.1rem; align-content: start; }
 .quote label { display: grid; gap: 0.35rem; font-weight: 600; font-size: 0.9375rem; }
-.quote input, .quote textarea { width: 100%; padding: 0.8rem 0.9rem; background: rgb(92 10 16 / 0.4); color: var(--chalk); border: 1px solid rgb(242 245 251 / 0.55); border-radius: 2px; font: inherit; font-weight: 400; }
-.quote input::placeholder { color: var(--rose); opacity: 1; }
-.quote input:focus-visible, .quote textarea:focus-visible { background: rgb(92 10 16 / 0.7); outline-offset: 2px; }
+.quote input, .quote textarea { width: 100%; padding: 0.8rem 0.9rem; background: var(--steel); color: var(--graphite); border: 1px solid var(--hair); border-radius: 2px; font: inherit; font-weight: 400; }
+.quote input::placeholder { color: var(--graphite-2); opacity: 1; }
+.quote input:focus-visible, .quote textarea:focus-visible { background: var(--white); border-color: var(--red); outline-offset: 2px; }
 .quote .btn { justify-self: start; margin-top: 0.4rem; }
 .foot { display: grid; gap: 0.2rem; margin-top: clamp(4rem, 10vh, 7rem); padding: 1.6rem calc(var(--gutter) + var(--rail)) 0 var(--gutter); border-top: 1px solid var(--hair); font-size: 0.875rem; color: var(--fg-2); }
+
+/* Later sections: one motion grammar. Headings rise word by word out of a mask, rows slide in one by one,
+   and a red seal line draws across the top of each section as it arrives, the way the bar seals a pack. */
+.count { font-variant-numeric: tabular-nums lining-nums; color: var(--red); }
+.js .w { display: inline-block; clip-path: inset(-0.12em -0.1em -0.28em -0.1em); vertical-align: top; }
+.js .w > span { display: inline-block; transform: translateY(118%); transition: transform 1.05s var(--ease); transition-delay: calc(var(--wi, 0) * 55ms); }
+.js .split.in .w > span { transform: none; }
+.solid::after { content: ""; position: absolute; left: 0; top: 0; z-index: 2; width: 100%; height: 3px; background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform 1.6s var(--ease); pointer-events: none; }
+.solid.sealed::after { transform: scaleX(1); }
+.js .rv--x { transform: translateX(-1.8rem); }
+.js .machine h3 { font-stretch: 100%; letter-spacing: 0.04em; opacity: 0; transition: font-stretch 1.5s var(--ease) 0.25s, letter-spacing 1.5s var(--ease) 0.25s, opacity 0.8s ease 0.25s; }
+.js .machine.in h3 { font-stretch: 64%; letter-spacing: 0; opacity: 1; }
+.machine__photo { transform: perspective(1100px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); }
+.result__photo.swap img { animation: swapin 0.8s var(--ease) both; }
+@keyframes swapin { from { opacity: 0; transform: translateY(1.2rem) scale(0.96); } }
+.news__list a { position: relative; padding-right: 3rem; }
+.news__list a::after { content: ""; position: absolute; right: 0; top: 50%; width: 1.6rem; height: 2px; background: var(--red); transform: scaleX(0); transform-origin: right; transition: transform 0.45s var(--ease); }
+.news__list a:hover::after { transform: scaleX(1); }
 
 @media (max-width: 900px) {
   :root { --rail: 0rem; }
@@ -341,4 +362,7 @@ html:not(.has-3d) .stage__body, html:not(.has-3d) .stage--hero .stage__body { ma
   .has-3d .stage__body { filter: none; transform: none; }
   .js .rv, .js .machine__photo { opacity: 1; transform: none; clip-path: none; }
   .scrollcue::after { animation: none; }
+  .js .w > span { transform: none; }
+  .solid::after { transform: scaleX(1); }
+  .js .machine h3 { opacity: 1; font-stretch: 64%; letter-spacing: 0; }
 }
