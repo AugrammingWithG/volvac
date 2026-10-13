@@ -163,6 +163,10 @@ h3 { font-stretch: 116%; font-weight: 650; font-size: 20px; letter-spacing: -0.0
 .reads dd { font-size: 28px; line-height: 1.15; }
 .reads--big { gap: 14px 64px; margin-top: 30px; }
 .reads--big dd { font-size: 54px; line-height: 1.08; }
+.reads--four { gap: 14px 42px; }
+.reads--four dd { font-size: 44px; }
+.reads--small { gap: 6px 20px; margin-top: 12px; }
+.reads--small dd { font-size: 19px; }
 .reads .pre { font-weight: 400; }
 
 /* Rows divided by hairlines: label on the left, answer on the right. */
@@ -186,6 +190,25 @@ h3 { font-stretch: 116%; font-weight: 650; font-size: 20px; letter-spacing: -0.0
 
 .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr); column-gap: 16mm; align-items: start; }
 .split .rows { margin-top: 6px; }
+.split--wall { grid-template-columns: minmax(0, 1fr) 122mm; column-gap: 12mm; align-items: center; }
+.split--wall .rows { margin-top: 20px; }
+
+/* Sample posts: one large, two stacked beside it ----------------------- */
+
+.wall { margin: 0; }
+.wall ul { display: grid; grid-template-columns: 2fr 1fr; gap: 4mm; align-items: start; }
+.wall li:first-child { grid-row: span 2; }
+.wall img { display: block; width: 100%; height: auto; border-radius: 2px; box-shadow: 0 12px 26px -16px oklch(0 0 0 / 0.8); }
+.wall figcaption { margin-top: 11px; font-size: 12px; color: var(--fg-2); }
+
+/* Marketing stages side by side ---------------------------------------- */
+
+.tracks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 9mm; margin-top: 24px; }
+.tracks h3 { display: grid; gap: 5px; }
+.tracks h3 i { font-style: normal; font-stretch: 68%; font-weight: 600; font-size: 11px; letter-spacing: 0.13em; text-transform: uppercase; color: var(--needle); }
+.rows--stack { margin-top: 14px; }
+.rows--stack > div { grid-template-columns: minmax(0, 1fr); row-gap: 3px; padding: 8px 0 9px; }
+.rows--stack dd { font-size: 12.5px; line-height: 1.45; }
 
 .grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 14mm; margin-top: 30px; border-bottom: 1px solid var(--hair); }
 .grid li { padding: 18px 0 22px; border-top: 1px solid var(--hair); }
@@ -220,7 +243,7 @@ h3 { font-stretch: 116%; font-weight: 650; font-size: 20px; letter-spacing: -0.0
 .rule b { font-weight: 650; line-height: 1.3; }
 .rule .price { margin-top: 2px; font-size: 25px; line-height: 1.15; }
 .rule i { font-style: normal; color: var(--fg-2); line-height: 1.5; }
-.rule__pre, .rule__post { margin-bottom: 103px; }
+.rule__pre, .rule__post { margin-bottom: 153px; } /* sits on the tick bar: ticks, numbers, marketing lane and invoices below */
 .rule__ticks { position: relative; height: 25px; border-top: 1px solid currentColor; }
 .rule__ticks i { position: absolute; top: 0; width: 1px; height: 7px; background: currentColor; opacity: 0.55; }
 .rule__ticks i.m { height: 12px; opacity: 0.8; }
@@ -248,13 +271,18 @@ h3 { font-stretch: 116%; font-weight: 650; font-size: 20px; letter-spacing: -0.0
 .rule__bills > div:last-child { border-right: 1px solid currentColor; }
 .rule__bills span { display: block; font-stretch: 68%; font-weight: 600; font-size: 11px; letter-spacing: 0.13em; text-transform: uppercase; line-height: 1.3; }
 .rule__bills .price { font-stretch: 70%; font-weight: 700; font-size: 21px; letter-spacing: 0.01em; text-transform: none; line-height: 1.2; }
+/* Marketing runs on its own lane above the invoices, in the same months. */
+.rule__lane { height: 50px; }
+.rule__lane > div { border-left-style: dashed; }
+.rule__lane > div:last-child { border-right-style: dashed; }
+.rule__lane .price { font-size: 17px; }
 
 /* Reconciliation table --------------------------------------------------- */
 
 .tally { width: 100%; margin-top: 26px; border-collapse: collapse; table-layout: fixed; font-variant-numeric: tabular-nums lining-nums; }
 .tally th, .tally td { padding: 10px 0 10px 14px; border-top: 1px solid var(--hair); text-align: left; vertical-align: baseline; font-weight: 400; }
-.tally th:first-child { padding-left: 0; width: 27%; }
-.tally .sum { width: 13%; }
+.tally th:first-child { padding-left: 0; width: 21%; }
+.tally .sum { width: 12%; }
 .tally .n { text-align: right; white-space: nowrap; }
 .tally thead th { border-top: 0; padding-top: 0; vertical-align: bottom; }
 .tally thead th.n { white-space: normal; text-wrap: balance; }

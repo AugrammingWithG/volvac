@@ -424,6 +424,8 @@
       packV: 0, packS: 'Open', packSettle: 0
     };
     var act = [0, 0, 0, 0, 0, 0];
+    var PLATE = ['VOLVAC', 'EST 2004'], plateTo = function () {}; // words on the marking station's nameplate
+    var gantry = [];                                               // the marking station's column and beam
     var tick = [];
     var anchors = [];
 
@@ -597,16 +599,26 @@
         '2': ['01110', '10001', '00001', '00010', '00100', '01000', '11111'],
         '0': ['01110', '10001', '10011', '10101', '11001', '10001', '01110'],
         '4': ['00010', '00110', '01010', '10010', '11111', '00010', '00010'],
+        'I': ['11111', '00100', '00100', '00100', '00100', '00100', '11111'],
+        'N': ['10001', '11001', '10101', '10011', '10001', '10001', '10001'],
+        'B': ['11110', '10001', '10001', '11110', '10001', '10001', '11110'],
+        'U': ['10001', '10001', '10001', '10001', '10001', '10001', '01110'],
         ' ': ['00000', '00000', '00000', '00000', '00000', '00000', '00000']
       };
-      var P = 0.165, top = 1.13, pts = [];
-      [['VOLVAC', -1.45], ['EST 2004', 0.3]].forEach(function (ln) {
-        var w = ln[0].length * 6 - 1, x0 = -w * P / 2;
-        for (var c = 0; c < ln[0].length; c++) for (var col = 0; col < 5; col++) for (var row = 0; row < 7; row++) {
-          if (F[ln[0][c]][row][col] === '1') pts.push([x0 + (c * 6 + col) * P, ln[1] + row * P]);
-        }
-      });
-      state.markTotal = pts.length;
+      var P = 0.165, top = 1.13, pts = [], CAP = 640, engraved = '';
+      // Lay out two lines of dots, at most eight characters each. Stills can ask for other words (shot's `plate`).
+      function engrave(lines) {
+        pts = [];
+        [[lines[0], -1.45], [lines[1], 0.3]].forEach(function (ln) {
+          var w = ln[0].length * 6 - 1, x0 = -w * P / 2;
+          for (var c = 0; c < ln[0].length; c++) for (var col = 0; col < 5; col++) for (var row = 0; row < 7; row++) {
+            var glyph = F[ln[0][c]] || F[' '];
+            if (glyph[row][col] === '1' && pts.length < CAP) pts.push([x0 + (c * 6 + col) * P, ln[1] + row * P]);
+          }
+        });
+        state.markTotal = pts.length;
+      }
+      engrave(PLATE);
 
       blob(g, 0, 0.2, 16, 10, 0.6);
       g.add(at(rbox(12, 0.6, 6.4, 0.18, M.enamel), 0, 0.3, 0));
@@ -617,13 +629,21 @@
       [[-4.35, -1.65], [4.35, -1.65], [-4.35, 1.65], [4.35, 1.65]].forEach(function (p) {
         var h = new T.Mesh(new T.CircleGeometry(0.16, 20), M.rubber); h.rotation.x = -PI / 2; g.add(at(h, p[0], top - 0.012, p[1]));
       });
-      var dots = new T.InstancedMesh(new T.CircleGeometry(0.062, 10), M.dot, pts.length);
+      var dots = new T.InstancedMesh(new T.CircleGeometry(0.062, 10), M.dot, CAP);
       var mtx = new T.Matrix4(), q = new T.Quaternion().setFromEuler(new T.Euler(-PI / 2, 0, 0)), one = V(1, 1, 1);
-      pts.forEach(function (p, i) { mtx.compose(V(p[0], top - 0.008, p[1]), q, one); dots.setMatrixAt(i, mtx); });
+      function place() {
+        pts.forEach(function (p, i) { mtx.compose(V(p[0], top - 0.008, p[1]), q, one); dots.setMatrixAt(i, mtx); });
+        dots.instanceMatrix.needsUpdate = true; engraved = plateKey;
+      }
+      var plateKey = PLATE.join('|'); place();
       dots.count = 0; g.add(dots);
+      plateTo = function (lines) {
+        lines = lines || PLATE; plateKey = lines.join('|');
+        if (plateKey !== engraved) { engrave(lines); place(); }
+      };
 
-      g.add(at(rbox(1.5, 9.4, 1.5, 0.2, M.enamel), -6.6, 5.0, -1.6));
-      g.add(at(rbox(13, 1.0, 1.0, 0.16, M.brushed), -0.4, 8.9, -1.6));
+      gantry = [at(rbox(1.5, 9.4, 1.5, 0.2, M.enamel), -6.6, 5.0, -1.6), at(rbox(13, 1.0, 1.0, 0.16, M.brushed), -0.4, 8.9, -1.6)];
+      g.add(gantry[0], gantry[1]);
       var head = new T.Group(); g.add(head);
       head.add(at(rbox(1.5, 1.7, 2.2, 0.18, M.black), 0, 8.6, -0.9));
       head.add(at(rbox(1.05, 3.6, 1.05, 0.16, M.enamel), 0, 6.0, 0));
@@ -1156,6 +1176,8 @@
       inkTo(o.ink ? 64 : INK.to, o.ink !== 'off'); // stills can push the ink's edge out of frame, or leave the plate bare
       ground();
       heroDial.needle.rotation.z = -((o.needle || 0) / 0.1) * 2 * PI;
+      plateTo(o.plate); // two lines of up to eight characters, or the usual nameplate when absent
+      gantry.forEach(function (m) { m.visible = o.gantry !== false; }); // a close still can leave out the column and beam
       for (var s = 1; s <= 5; s++) {
         var av = (o.act && o.act[s]) || 0;
         for (var r = 0; r < (s === 3 ? 40 : 1); r++) tick[s](av, 1.3, 0.016);

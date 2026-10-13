@@ -12,6 +12,19 @@
       { name: '3D production', weeks: 4, cost: 2000, month: 2 },
       { name: 'Build and launch', weeks: 4, cost: 2000, month: 3 }
     ],
+    // Marketing runs beside the website, one stage a month, in the same invoice as that month's website stage.
+    // A cost of 0 shows as "Included" everywhere. The page warns on screen if the months do not come to the same total.
+    marketing: [
+      { name: 'Groundwork', cost: 0, month: 1 },
+      { name: 'Content and first posts', cost: 0, month: 2 },
+      { name: 'Launch campaign', cost: 0, month: 3 }
+    ],
+    // From the month after launch, marketing continues as one of these. `pick` is the one we recommend.
+    marketingPlans: [
+      { name: 'Social', price: 650, what: 'Twelve designed posts a month across Instagram, LinkedIn and Facebook, written, scheduled and posted for you. Comments answered, and enquiries passed to your team. A one-page report each month.' },
+      { name: 'Social and Search', price: 1200, what: 'Everything in Social, plus four short clips a month made from the 3D models, one article or product page a month written for search, ongoing search fixes across the site, and rankings and enquiries in the monthly report.', pick: true },
+      { name: 'Growth', price: 2100, what: 'Everything in Social and Search, plus twenty posts a month, YouTube, and paid campaigns on LinkedIn and Meta set up and run for you. Ad spend is paid to the platforms directly.' }
+    ],
     careIncluded: 3, // months of the picked care plan included after launch
     care: [
       { name: 'Lite Care', price: 150, what: 'Hosting checks, uptime monitoring, and small fixes.' },
@@ -30,6 +43,7 @@
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
   function money(n) { return 'A$' + Math.round(n).toLocaleString('en-US'); }
+  function charge(n) { return n ? money(n) : 'Included'; } // marketing stages that come at no extra cost
   var WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen'];
   function word(n) { return WORDS[n] || String(n); }
   function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
@@ -40,14 +54,20 @@
   var start = [], t = 0, bad = [];
   PLAN.stages.forEach(function (s, i) { start[i] = t; t += s.weeks; });
   var weeks = t, total = sum(PLAN.stages, function (s) { return s.cost; });
+  var mktTotal = sum(PLAN.marketing, function (s) { return s.cost; });
   var months = [];
   PLAN.stages.forEach(function (s) {
-    var m = months[s.month - 1] || (months[s.month - 1] = { cost: 0, weeks: 0, last: 0 });
+    var m = months[s.month - 1] || (months[s.month - 1] = { cost: 0, mkt: 0, weeks: 0, last: 0 });
     m.cost += s.cost; m.weeks += s.weeks;
   });
   PLAN.stages.forEach(function (s, i) { months[s.month - 1].last = i; });
+  PLAN.marketing.forEach(function (s) {
+    if (!months[s.month - 1]) bad.push('Marketing stage "' + s.name + '" is in month ' + s.month + ', which has no website stage');
+    else months[s.month - 1].mkt += s.cost;
+  });
   months.forEach(function (m, j) {
     if (m.cost !== months[0].cost) bad.push('Month ' + (j + 1) + ' comes to ' + money(m.cost) + ', month 1 to ' + money(months[0].cost));
+    if (m.mkt !== months[0].mkt) bad.push('Marketing in month ' + (j + 1) + ' comes to ' + money(m.mkt) + ', in month 1 to ' + money(months[0].mkt));
     if (m.weeks !== PLAN.monthWeeks) bad.push('Month ' + (j + 1) + ' holds ' + m.weeks + ' weeks of stages, a month is ' + PLAN.monthWeeks);
   });
   if (bad.length) { var w = $('#warn'); w.hidden = false; w.textContent = 'Check PLAN in proposal.js. ' + bad.join('. ') + '.'; }
@@ -57,10 +77,13 @@
     return a === b ? 'Week ' + a : 'Weeks ' + a + ' to ' + b;
   }
   var pick = PLAN.care.filter(function (c) { return c.pick; })[0] || PLAN.care[0];
+  var mktPick = PLAN.marketingPlans.filter(function (c) { return c.pick; })[0] || PLAN.marketingPlans[0];
   var V = {
     date: PLAN.date, zero: money(0), total: money(total), weeks: String(weeks),
     months: String(months.length), 'months.words': word(months.length), 'months.words.cap': cap(word(months.length)),
     'months.after1': word(months.length - 1), 'month.cost': money(months[0].cost), 'month.weeks.words': word(PLAN.monthWeeks),
+    'month.total': money(months[0].cost + months[0].mkt), 'mkt.cost': charge(months[0].mkt), 'mkt.total': charge(mktTotal),
+    'mkt.from': word(months.length + 1), 'mkt.pick.name': mktPick.name, 'mkt.pick.price': money(mktPick.price),
     'care.pick.name': pick.name, 'care.free.words': word(PLAN.careIncluded), 'care.free.words.cap': cap(word(PLAN.careIncluded)),
     'care.free.value': money(pick.price * PLAN.careIncluded)
   };
@@ -68,6 +91,10 @@
     var k = 's' + (i + 1);
     V[k + '.cost'] = money(s.cost); V[k + '.runs'] = runs(i); V[k + '.month'] = 'Month ' + s.month;
     V[k + '.closes'] = months[s.month - 1].last === i ? 'This closes month ' + s.month + '.' : '';
+  });
+  PLAN.marketing.forEach(function (s, i) {
+    var k = 'm' + (i + 1);
+    V[k + '.name'] = s.name; V[k + '.cost'] = charge(s.cost); V[k + '.month'] = 'Month ' + s.month;
   });
   $$('[data-v]').forEach(function (e) { var v = V[e.dataset.v]; e.textContent = v == null ? '?' : v; });
 
@@ -83,6 +110,7 @@
     });
   }
   planRows($('#plans'), PLAN.care, ' a month', 'First ' + word(PLAN.careIncluded) + ' months included');
+  planRows($('#mkt-plans'), PLAN.marketingPlans, ' a month', 'Recommended');
   planRows($('#addons'), PLAN.addons, '');
 
   /* Timeline: a steel rule, one major division per week ------------------ */
@@ -102,36 +130,47 @@
     for (var k = 0; k <= count; k++) { var tk = el('i', k % per === 0 ? 'l' : ''); tk.style.left = (k / count * 100) + '%'; ticks.appendChild(tk); }
     nums.appendChild(el('b', '', 'Today'));
     for (var wk = 1; wk <= weeks; wk++) { var nm = el('span', '', wk === 1 ? 'Week 1' : String(wk)); nm.style.left = ((wk - 0.5) / weeks * 100) + '%'; nums.appendChild(nm); }
+    // Marketing runs under the weeks of the month it shares with a website stage.
+    var lane = el('div', 'rule__bills rule__lane');
+    lane.appendChild(el('b', '', 'Marketing'));
+    PLAN.marketing.forEach(function (s) {
+      var d = el('div'); d.style.width = (months[s.month - 1].weeks / weeks * 100) + '%';
+      d.appendChild(el('span', '', s.name)); d.appendChild(el('span', 'price', charge(s.cost)));
+      lane.appendChild(d);
+    });
     bills.appendChild(el('b', '', 'Invoiced'));
     months.forEach(function (m, j) {
       var bl = el('div'); bl.style.width = (m.weeks / weeks * 100) + '%';
-      bl.appendChild(el('span', '', 'Month ' + (j + 1))); bl.appendChild(el('span', 'price', money(m.cost)));
+      bl.appendChild(el('span', '', 'Month ' + (j + 1))); bl.appendChild(el('span', 'price', money(m.cost + m.mkt)));
       bills.appendChild(bl);
     });
     var body = el('div', 'rule__body');
-    body.appendChild(spans); body.appendChild(ticks); body.appendChild(el('div', 'rule__index')); body.appendChild(nums); body.appendChild(bills);
+    body.appendChild(spans); body.appendChild(ticks); body.appendChild(el('div', 'rule__index')); body.appendChild(nums); body.appendChild(lane); body.appendChild(bills);
     rule.appendChild(pre); rule.appendChild(body); rule.appendChild(post);
   })();
 
   /* Invoices against stages ---------------------------------------------- */
 
   (function () {
+    // One column for each website stage, then one for each marketing stage when marketing is charged for.
+    var cols = PLAN.stages.map(function (s, i) { return { s: s, label: 'Stage ' + (i + 1) }; })
+      .concat(mktTotal ? PLAN.marketing.map(function (s, i) { return { s: s, label: 'Marketing ' + (i + 1), mkt: true }; }) : []);
     var tb = $('#tally'), head = el('tr');
     head.appendChild(el('th', '', 'Invoice'));
-    PLAN.stages.forEach(function (s, i) { var th = el('th', 'n'); th.appendChild(el('span', '', 'Stage ' + (i + 1))); th.appendChild(el('small', '', s.name)); head.appendChild(th); });
+    cols.forEach(function (c) { var th = el('th', 'n' + (c.mkt ? ' mkt' : '')); th.appendChild(el('span', '', c.label)); th.appendChild(el('small', '', c.s.name)); head.appendChild(th); });
     head.appendChild(el('th', 'n sum', 'Invoice total'));
     var thead = el('thead'); thead.appendChild(head); tb.appendChild(thead);
     var body = el('tbody'), wk = 0;
     months.forEach(function (m, j) {
       var tr = el('tr'), th = el('th'); th.appendChild(el('span', '', 'Month ' + (j + 1)));
       th.appendChild(el('small', '', 'Weeks ' + (wk + 1) + ' to ' + (wk + m.weeks) + ', issued at the start')); wk += m.weeks; tr.appendChild(th);
-      PLAN.stages.forEach(function (s) { var on = s.month === j + 1; tr.appendChild(el('td', on ? 'n' : 'n nil', on ? money(s.cost) : '0')); });
-      tr.appendChild(el('td', 'n sum', money(m.cost))); body.appendChild(tr);
+      cols.forEach(function (c) { var on = c.s.month === j + 1; tr.appendChild(el('td', (on ? 'n' : 'n nil') + (c.mkt ? ' mkt' : ''), on ? money(c.s.cost) : '0')); });
+      tr.appendChild(el('td', 'n sum', money(m.cost + m.mkt))); body.appendChild(tr);
     });
     tb.appendChild(body);
     var foot = el('tfoot'), fr = el('tr'); fr.appendChild(el('th', '', 'Stage cost'));
-    PLAN.stages.forEach(function (s) { fr.appendChild(el('td', 'n', money(s.cost))); });
-    fr.appendChild(el('td', 'n sum', money(total))); foot.appendChild(fr); tb.appendChild(foot);
+    cols.forEach(function (c) { fr.appendChild(el('td', 'n' + (c.mkt ? ' mkt' : ''), money(c.s.cost))); });
+    fr.appendChild(el('td', 'n sum', money(total + mktTotal))); foot.appendChild(fr); tb.appendChild(foot);
   })();
 
   /* Page furniture: mark, running foot, and the scale on the right edge -- */
@@ -172,6 +211,7 @@
       leak: from(1, 1.42, 0.235, 0.02, { act: { 1: 1 }, ink: 'off' }),
       pack: from(5, 1.45, -0.25, 0.08, { act: { 5: 1 }, ink: 'off' }),
       gauges: { p: [K[2].t[0] - 9, 17, 45], t: [K[2].t[0], 5.4, 0], sx: 0.2, sy: 0, act: { 2: 1 }, ink: 'off' },
+      packer: from(5, 1.6, 0.25, 0.06, { act: { 5: 0.65 }, ink: 'off' }),
       makers: { p: [MK.x, 46, zc + 20], t: [MK.x, 0, zc], sx: 0.2, sy: 0 }
     };
   }
@@ -209,6 +249,16 @@
         li.appendChild(img); li.appendChild(el('span', '', name)); strip.appendChild(li);
       });
     });
+    // The sample posts in Volvac's current brand, drawn by the same code as samples.html.
+    var S = window.VolvacSamples, wall = $('#sample-posts');
+    if (S && wall) S.posts.forEach(function (post, i) {
+      jobs.push(function () {
+        var full = S.draw(scene, i, 'portrait'), c = document.createElement('canvas'); c.width = 720; c.height = 900;
+        c.getContext('2d').drawImage(full, 0, 0, c.width, c.height);
+        var li = el('li'), img = new Image(); img.alt = post.alt; img.src = c.toDataURL('image/jpeg', 0.9);
+        li.appendChild(img); wall.appendChild(li);
+      });
+    });
     (function next() {
       if (!jobs.length) { window.__ready = true; return; }
       jobs.shift()(); setTimeout(next, 20);
@@ -218,5 +268,6 @@
   var ready = document.fonts && document.fonts.load
     ? Promise.all([document.fonts.load('400 30px Archivo'), document.fonts.load('600 40px Archivo'), document.fonts.load('800 40px Archivo')])
     : Promise.resolve();
+  if (window.VolvacSamples) ready = Promise.all([ready, window.VolvacSamples.ready]);
   Promise.race([ready, new Promise(function (r) { setTimeout(r, 2000); })]).then(stills, stills);
 })();
