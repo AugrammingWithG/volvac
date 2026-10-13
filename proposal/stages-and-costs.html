@@ -22,7 +22,7 @@
 <section class="page page--cover" data-tone="ink" data-name="Start" data-still="cover">
   <div class="body">
     <h1>Stages<br>and costs</h1>
-    <p class="lede">The Volvac brand and website, from the concept you have seen to a live site. What happens at each stage, what each stage costs, and why.</p>
+    <p class="lede">The Volvac brand, website and marketing, from the concept you have seen to a live site that buyers can find. What happens at each stage, what each stage costs, and why.</p>
     <p class="note">Prepared for Volvac by SocialHat, <span data-v="date"></span>.</p>
     <p class="note">Stills throughout are taken from the concept homepage. Readings shown on instruments are illustrative.</p>
   </div>
@@ -31,11 +31,12 @@
 <!-- At a glance -->
 <section class="page" data-tone="steel" data-name="At a glance">
   <div class="body body--wide">
-    <h2>Three stages, one a month.</h2>
-    <p class="lede">The concept is finished and cost you nothing. From here the work runs in three stages, one a month, at <span data-v="month.cost"></span> each. Each stage closes with something you can see and sign off, and the next stage is not started until you have approved it.</p>
-    <dl class="reads reads--big">
-      <div><dt>Implementation, three stages</dt><dd data-v="total"></dd></div>
-      <div><dt>Invoiced monthly</dt><dd><span data-v="months"></span> × <span data-v="month.cost"></span></dd></div>
+    <h2>Three months, two tracks.</h2>
+    <p class="lede">The concept is finished and cost you nothing. From here the website runs in three stages, one a month, at <span data-v="month.total"></span> each. Marketing runs beside it, also one stage a month, and is included in that price, so that buyers are already following Volvac on the day the site goes live. Each stage closes with something you can see and sign off, and the next is not started until you have approved it.</p>
+    <dl class="reads reads--big reads--four">
+      <div><dt>Website, three stages</dt><dd data-v="total"></dd></div>
+      <div><dt>Marketing, three stages</dt><dd data-v="mkt.total"></dd></div>
+      <div><dt>Invoiced monthly</dt><dd><span data-v="months"></span> × <span data-v="month.total"></span></dd></div>
       <div><dt>Concept to live site</dt><dd><span data-v="months"></span> months</dd></div>
     </dl>
     <div class="rule" id="rule" aria-label="Timeline of the three stages"></div>
@@ -61,7 +62,7 @@
       </li>
       <li>
         <h3><span data-v="months.words.cap"></span> equal invoices.</h3>
-        <p>Each stage is one month and one invoice of <span data-v="month.cost"></span>, so the cost arrives evenly. Each stage ends on a sign-off, so you are never committed further than the stage you are in.</p>
+        <p>Each month is one invoice of <span data-v="month.total"></span>, covering the website stage and the marketing stage beside it, so the cost arrives evenly. Each stage ends on a sign-off, so you are never committed further than the month you are in.</p>
       </li>
     </ul>
   </div>
@@ -80,7 +81,7 @@
         </dl>
       </div>
       <dl class="rows">
-        <div><dt>What exists</dt><dd>A new wordmark, colour system and single typeface. A homepage in real 3D: one granite inspection plate carrying six instrument groups, each modelled in code and animated. Ten makers and six services laid out with wording drawn from your current site. Nine social posts, each in portrait and landscape.</dd></div>
+        <div><dt>What exists</dt><dd>A new wordmark, colour system and single typeface. A homepage in real 3D: one granite inspection plate carrying six instrument groups, each modelled in code and animated. Ten makers and six services laid out with wording drawn from your current site. Nine social posts, each in portrait and landscape, and three sample posts in Volvac's current brand.</dd></div>
         <div><dt>Why no charge</dt><dd>The creative direction is our risk to take. It also means every price that follows is for building something you have already seen, not for exploring.</dd></div>
       </dl>
     </div>
@@ -145,6 +146,64 @@
   <p class="cap">From the concept: chamber vacuum packer</p>
 </section>
 
+<!-- Marketing -->
+<section class="page" data-tone="ink" data-name="Marketing">
+  <div class="body body--wide">
+    <div class="split split--wall">
+      <div>
+        <h2>Marketing, made by the people who made the brand.</h2>
+        <p class="lede">A new site pays for itself when buyers find it. Our own team of graphic designers makes Volvac's posts from the same 3D models as the site. We write them and post them, and we look after search, so that buyers in your export markets find Volvac when they look for a machine.</p>
+        <dl class="rows">
+          <div><dt>Social media</dt><dd>A content plan, designed posts and short 3D clips for Instagram, LinkedIn, Facebook and YouTube, written, scheduled and posted for you. Comments answered, and enquiries passed to your team.</dd></div>
+          <div><dt>Search</dt><dd>Keyword research for the markets you sell to most, page titles and descriptions, product markup, Google Search Console and your Google Business Profile, then articles that answer what buyers search for.</dd></div>
+          <div><dt>Reporting</dt><dd>One page a month: reach, followers, search rankings, and the enquiries that came from each.</dd></div>
+        </dl>
+      </div>
+      <figure class="wall">
+        <ul id="sample-posts" aria-label="Three sample posts"></ul>
+        <figcaption>Three sample posts made for this proposal, in Volvac's current brand and from the concept's 3D models. All three are in samples.html, in portrait and landscape.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- Marketing stages -->
+<section class="page" data-tone="steel" data-name="Marketing stages">
+  <div class="body body--wide">
+    <h2>Marketing stages, one a month beside the site</h2>
+    <p class="lede">Each marketing stage runs in the same month as a website stage, uses what that stage produces, and ends on its own sign-off. All three are included in the monthly <span data-v="month.total"></span>, at no extra cost.</p>
+    <ol class="tracks">
+      <li>
+        <h3><i>Marketing 1</i><span data-v="m1.name"></span></h3>
+        <dl class="reads reads--small"><div><dt>Runs</dt><dd data-v="m1.month"></dd></div><div><dt>Beside</dt><dd>Stage 1</dd></div><div><dt>Cost</dt><dd data-v="m1.cost"></dd></div></dl>
+        <dl class="rows rows--stack">
+          <div><dt>What happens</dt><dd>We audit your current Instagram, LinkedIn, Facebook and YouTube accounts and where Volvac stands in search today. We research the words buyers use for your machines in the markets you sell to most, and agree what to post, how often, and in what voice.</dd></div>
+          <div><dt>You receive</dt><dd>A content plan and posting calendar, and a keyword map that sets the page titles and wording of the new site before it is built.</dd></div>
+          <div><dt>You sign off</dt><dd>The plan and the keyword map.</dd></div>
+        </dl>
+      </li>
+      <li>
+        <h3><i>Marketing 2</i><span data-v="m2.name"></span></h3>
+        <dl class="reads reads--small"><div><dt>Runs</dt><dd data-v="m2.month"></dd></div><div><dt>Beside</dt><dd>Stage 2</dd></div><div><dt>Cost</dt><dd data-v="m2.cost"></dd></div></dl>
+        <dl class="rows rows--stack">
+          <div><dt>What happens</dt><dd>Our designers turn the signed-off identity into post templates for every channel and format. Posting starts: twelve posts across the month, made from the 3D models and your product range, so an audience is building before the site launches.</dd></div>
+          <div><dt>You receive</dt><dd>The template set, twelve published posts, and the first month's numbers.</dd></div>
+          <div><dt>You sign off</dt><dd>The templates, and each week's posts before they go out.</dd></div>
+        </dl>
+      </li>
+      <li>
+        <h3><i>Marketing 3</i><span data-v="m3.name"></span></h3>
+        <dl class="reads reads--small"><div><dt>Runs</dt><dd data-v="m3.month"></dd></div><div><dt>Beside</dt><dd>Stage 3</dd></div><div><dt>Cost</dt><dd data-v="m3.cost"></dd></div></dl>
+        <dl class="rows rows--stack">
+          <div><dt>What happens</dt><dd>Teaser posts in the run-up, then launch day across every channel with short clips from the 3D scene. On the site, every page gets its search title, description and product markup, the sitemap goes to Google, and Search Console, analytics and your Google Business Profile are set up.</dd></div>
+          <div><dt>You receive</dt><dd>The launch campaign, a site search engines can read from its first day, and a baseline report to measure from.</dd></div>
+          <div><dt>You sign off</dt><dd>The campaign before it goes out.</dd></div>
+        </dl>
+      </li>
+    </ol>
+  </div>
+</section>
+
 <!-- After launch -->
 <section class="page" data-tone="stone" data-name="After launch" data-still="gauges" data-side="left">
   <div class="body">
@@ -154,6 +213,17 @@
     <p class="note"><span data-v="care.free.words.cap"></span> months of <span data-v="care.pick.name"></span> is worth <span data-v="care.free.value"></span>. A new site collects small requests in its first months, and this covers them without a quote each time.</p>
   </div>
   <p class="cap">From the concept: manifold gauge set and charging cylinder</p>
+</section>
+
+<!-- Marketing after launch -->
+<section class="page" data-tone="stone" data-name="Marketing plans" data-still="packer" data-side="left">
+  <div class="body">
+    <h2>Marketing after launch, month by month</h2>
+    <p class="lede">From month <span data-v="mkt.from"></span>, marketing carries on as a monthly plan. You can move between plans or stop with a month's notice. We recommend <span data-v="mkt.pick.name"></span> for the first year, while the site builds its place in search.</p>
+    <dl class="rows rows--plans" id="mkt-plans"></dl>
+    <p class="note">Every plan includes the design work: posts are made by our designers in the Volvac identity, not from stock templates.</p>
+  </div>
+  <p class="cap">From the concept: chamber vacuum packer</p>
 </section>
 
 <!-- Options -->
@@ -170,14 +240,16 @@
 <section class="page" data-tone="steel" data-name="Figures">
   <div class="body body--wide">
     <h2>How the <span data-v="months.words"></span> months add up</h2>
-    <p class="lede"><span data-v="months.words.cap"></span> invoices of <span data-v="month.cost"></span>, each issued when its month begins. Each invoice pays for one stage.</p>
+    <p class="lede"><span data-v="months.words.cap"></span> invoices of <span data-v="month.total"></span>, each issued when its month begins. Each invoice pays for one website stage, and the marketing stage beside it is included.</p>
     <table class="tally" id="tally"></table>
     <ul class="terms">
       <li>Prices are in Australian dollars and exclude any taxes that may apply.</li>
       <li>Each month is invoiced when it begins. The next month starts only after sign-off.</li>
       <li>Timings assume feedback within two working days at each sign-off.</li>
+      <li>Marketing stages 1 to 3 are included in the monthly price and are not invoiced separately.</li>
+      <li>From month <span data-v="mkt.from"></span>, the marketing plan you choose is invoiced monthly and can be changed or stopped with a month's notice.</li>
       <li><span data-v="care.pick.name"></span> is included for <span data-v="care.free.words"></span> months from launch. After that, care is optional.</li>
-      <li>Not included: photography or video, and fees charged by third parties such as domain registration and hosting.</li>
+      <li>Not included: photography or filmed video, advertising spend, and fees charged by third parties such as domain registration and hosting.</li>
     </ul>
   </div>
 </section>
@@ -186,7 +258,7 @@
 <section class="page page--cover" data-tone="ink" data-name="Next step" data-still="next">
   <div class="body">
     <h2>The next step<br>is stage 1.</h2>
-    <p class="lede"><span data-v="month.cost"></span> and <span data-v="month.weeks.words"></span> weeks. It ends with the whole site decided on paper: the sitemap, the finished identity, and every page designed and written. Once that is signed off, the site is <span data-v="months.after1"></span> months from live.</p>
+    <p class="lede"><span data-v="month.total"></span> and <span data-v="month.weeks.words"></span> weeks, with marketing included. It ends with the whole site decided on paper: the sitemap, the finished identity, every page designed and written, and the marketing plan and keyword map agreed. Once that is signed off, the site is <span data-v="months.after1"></span> months from live.</p>
     <ul class="lines">
       <li><span>To approve stage 1, or to ask anything</span><b>info@socialhat.com.au</b></li>
       <li><span>Website</span><b>socialhat.com.au</b></li>
@@ -196,6 +268,8 @@
 
 <script src="../assets/vendor/three.min.js"></script>
 <script src="../assets/js/scene.js"></script>
+<script src="../assets/js/samples-logo.js"></script>
+<script src="../assets/js/samples.js"></script>
 <script src="proposal.js"></script>
 </body>
 </html>
