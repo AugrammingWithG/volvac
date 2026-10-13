@@ -140,7 +140,7 @@
     })();
 
     var scene = new T.Scene();
-    var BG_INK = new T.Color(0x081648), BG_STONE = new T.Color(0xd2d5d4), BG_BLACK = new T.Color(0x0a0b0d);
+    var BG_INK = new T.Color(0x0c1f38), BG_STONE = new T.Color(0xd2d5d4), BG_BLACK = new T.Color(0x0a0b0d);
     scene.background = BG_INK.clone();
     scene.fog = new T.Fog(BG_INK.clone(), 42, 112);
 
@@ -305,11 +305,11 @@
       black: new T.MeshStandardMaterial({ color: 0x17191c, metalness: 0.5, roughness: 0.45 }),
       rubber: new T.MeshStandardMaterial({ color: 0x1b1c1e, metalness: 0, roughness: 0.8 }),
       enamel: new T.MeshStandardMaterial({ color: 0x2b3038, metalness: 0.2, roughness: 0.38 }),
-      inkPaint: new T.MeshStandardMaterial({ color: 0x1b3aa6, metalness: 0.25, roughness: 0.35 }),
+      inkPaint: new T.MeshStandardMaterial({ color: 0x1f4c85, metalness: 0.25, roughness: 0.35 }),
       white: new T.MeshStandardMaterial({ color: 0xe4e7e9, metalness: 0.1, roughness: 0.4 }),
       brass: new T.MeshStandardMaterial({ color: 0xb9975a, metalness: 1, roughness: 0.3 }),
-      needle: new T.MeshStandardMaterial({ color: 0xff5a1f, emissive: 0xff4a10, emissiveIntensity: 0.35, roughness: 0.5 }),
-      button: new T.MeshStandardMaterial({ color: 0xff5a1f, emissive: 0xff4a10, emissiveIntensity: 0.35, roughness: 0.5 }),
+      needle: new T.MeshStandardMaterial({ color: 0xd2121d, emissive: 0xb50f18, emissiveIntensity: 0.35, roughness: 0.5 }),
+      button: new T.MeshStandardMaterial({ color: 0xd2121d, emissive: 0xb50f18, emissiveIntensity: 0.35, roughness: 0.5 }),
       glass: sheer(new T.MeshStandardMaterial({ color: 0xffffff, metalness: 1, roughness: 0.02, transparent: true, opacity: 0.13, depthWrite: false })),
       hoseBlue: new T.MeshStandardMaterial({ color: 0x1d4fc4, roughness: 0.55 }),
       hoseRed: new T.MeshStandardMaterial({ color: 0xc4281d, roughness: 0.55 }),
@@ -394,7 +394,7 @@
     var INK = { from: -112, to: 8.2, dry: 17.8 };
     function inkStuff(map, mask) {
       var m = new T.MeshStandardMaterial({
-        color: 0x0d2a9a, map: map, alphaMap: mask || null, transparent: !!mask, roughness: 0.36, metalness: 0.05,
+        color: 0x143463, map: map, alphaMap: mask || null, transparent: !!mask, roughness: 0.36, metalness: 0.05,
         polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2
       });
       return mask ? sheer(m) : m;
@@ -543,7 +543,7 @@
       var hook = mesh(new T.TorusGeometry(0.55, 0.11, 12, 40, PI * 1.5), M.chrome); hook.rotation.z = -PI / 4; m.add(at(hook, 0, 12.05, 0));
       m.add(at(cyl(0.11, 0.11, 1.1, M.chrome, 12), 0, 11.0, 0));
       m.add(at(rbox(6.8, 1.4, 1.2, 0.22, M.alu), 0, 7.2, 0));
-      var low = dial({ r: 1.6, depth: 0.8, tex: gaugeTex(10, 2, 'bar', '#16307a', '#f4f6fb'), body: M.inkPaint });
+      var low = dial({ r: 1.6, depth: 0.8, tex: gaugeTex(10, 2, 'bar', '#19385f', '#f4f6fb'), body: M.inkPaint });
       var high = dial({ r: 1.6, depth: 0.8, tex: gaugeTex(30, 5, 'bar', '#b3261c', '#fbf4f2'), body: new T.MeshStandardMaterial({ color: 0xb3261c, roughness: 0.4, metalness: 0.2 }) });
       m.add(at(low, -1.95, 9.2, 0.1)); m.add(at(high, 1.95, 9.2, 0.1));
       [[-1, M.hoseBlue], [1, M.hoseRed]].forEach(function (s) {

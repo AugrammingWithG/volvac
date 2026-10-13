@@ -1,0 +1,106 @@
+/* Brand guide: a plain reading page in the site's own system. */
+
+html { scroll-snap-type: none; }
+.guide { background: var(--steel); }
+.guide main > section, .guide__head, .guide__foot { color: var(--fg); padding-inline: var(--gutter); }
+
+.guide__head {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding-block: 1rem;
+  background: var(--ink-deep);
+}
+.guide__head .bar__nav { margin-left: auto; }
+
+.guide__open { background: var(--ink); padding-block: clamp(5rem, 14vh, 9rem) clamp(4rem, 10vh, 7rem); }
+.guide__open h1 { font-size: clamp(2.6rem, 6vw, 5.5rem); }
+.guide .lede { max-width: 42rem; }
+
+.guide__part { padding-block: clamp(4.5rem, 11vh, 8rem) clamp(4rem, 9vh, 6.5rem); }
+.guide__part[data-tone="steel"] { background: var(--steel); }
+.guide__part[data-tone="stone"] { background: var(--stone); }
+.guide__part[data-tone="black"] { background: var(--black); }
+.guide__part h2 { font-size: clamp(2rem, 3.5vw, 3.4rem); }
+.guide__part .lede a, .facts a { text-decoration: underline 1px; text-underline-offset: 0.18em; }
+.guide code { font-family: inherit; font-stretch: 78%; font-weight: 600; letter-spacing: 0.02em; }
+
+/* Logo on its grounds */
+.logos { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1px; margin-top: 3rem; }
+.logos li {
+  display: grid;
+  align-content: space-between;
+  justify-items: start;
+  gap: 3.5rem;
+  min-height: 15rem;
+  padding: 2.5rem 2rem 1.4rem;
+  color: var(--fg);
+}
+.logos img { display: block; height: 3rem; width: auto; }
+.logos span, .facts dt, .specimens b {
+  font-stretch: 68%;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.logos span { color: var(--fg-2); }
+
+/* Label and answer rows on hairlines */
+.facts { margin-top: 3rem; max-width: 60rem; border-bottom: 1px solid color-mix(in oklch, currentColor 30%, transparent); }
+.facts > div {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr);
+  gap: 0.4rem 2rem;
+  padding: 1.1rem 0 1.2rem;
+  border-top: 1px solid color-mix(in oklch, currentColor 30%, transparent);
+}
+.facts dt { padding-top: 0.25rem; color: var(--fg-2); }
+.facts dd { max-width: 42rem; }
+
+/* Colour */
+.swatches { margin-top: 3rem; max-width: 64rem; border-bottom: 1px solid oklch(0.2 0.012 255 / 0.3); }
+.swatches li {
+  display: grid;
+  grid-template-columns: 4.5rem 11rem 6.5rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.3rem 1.5rem;
+  padding: 0.8rem 0;
+  border-top: 1px solid oklch(0.2 0.012 255 / 0.3);
+}
+.swatches i { width: 4.5rem; height: 3rem; border-radius: 2px; border: 1px solid oklch(0.2 0.012 255 / 0.25); }
+.swatches b { font-stretch: 116%; font-weight: 650; letter-spacing: -0.012em; }
+.swatches code { font-size: 1.15rem; font-variant-numeric: tabular-nums lining-nums; user-select: all; }
+.swatches span { color: var(--fg-2); }
+
+/* Type */
+.specimens { margin-top: 3rem; max-width: 64rem; border-bottom: 1px solid oklch(0.2 0.012 255 / 0.3); }
+.specimens li {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 0.8rem 3rem;
+  padding: 1.6rem 0;
+  border-top: 1px solid oklch(0.2 0.012 255 / 0.3);
+}
+.specimens span { color: var(--fg-2); }
+.specimens b { display: block; margin-bottom: 0.3rem; color: var(--fg); }
+.sp--head { font-stretch: 122%; font-weight: 680; font-size: clamp(2.2rem, 4.4vw, 4rem); letter-spacing: -0.025em; line-height: 0.98; }
+.sp--body { font-size: 1.1875rem; max-width: 26rem; }
+.sp--label { font-stretch: 68%; font-weight: 600; font-size: 1rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.sp--num { font-stretch: 70%; font-weight: 760; font-size: 2.6rem; line-height: 1.1; font-variant-numeric: tabular-nums lining-nums; }
+.sp--list { font-stretch: 62%; font-weight: 700; font-size: clamp(2rem, 3.6vw, 3.2rem); line-height: 1; text-transform: uppercase; }
+
+.guide__foot { background: var(--ink); padding-block: 2.2rem; font-size: 0.875rem; color: var(--fg-2); }
+
+@media (max-width: 860px) {
+  .guide__head .bar__nav { position: static; padding: 0; background: none; gap: 1rem; }
+  .guide__head { flex-wrap: wrap; gap: 0.6rem 1.5rem; }
+  .guide__head .mark svg { width: 150px; height: auto; }
+  .facts > div, .specimens li { grid-template-columns: 1fr; }
+  .swatches li { grid-template-columns: 4.5rem minmax(0, 1fr) auto; }
+  .swatches span { grid-column: 2 / -1; }
+}
