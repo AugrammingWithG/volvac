@@ -8,9 +8,9 @@
     // `month` is the invoice a stage belongs to. The stages in a month should fill it (monthWeeks);
     // the page shows a warning on screen if they do not, or if the months are not equal.
     stages: [
-      { name: 'Discovery and design', weeks: 4, cost: 2000, month: 1 },
-      { name: '3D production', weeks: 4, cost: 2000, month: 2 },
-      { name: 'Build and launch', weeks: 4, cost: 2000, month: 3 }
+      { name: 'Discovery and design', weeks: 4, cost: 4000, month: 1 },
+      { name: '3D production', weeks: 4, cost: 4000, month: 2 },
+      { name: 'Build and launch', weeks: 4, cost: 4000, month: 3 }
     ],
     // Marketing runs beside the website, one stage a month, in the same invoice as that month's website stage.
     // A cost of 0 shows as "Included" everywhere. The page warns on screen if the months do not come to the same total.
