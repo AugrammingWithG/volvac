@@ -7,4 +7,4 @@ Brand and homepage concept for Volvac, prepared by SocialHat. Not yet an officia
 - `brand/`: logo and mark files, PNG and SVG.
 - `social.html`: nine ready social posts in portrait and landscape, each saved as a PNG from the page.
 
-Colours: Volvac navy `#19385F`, Volvac red `#D2121D`, deep ink `#0F2440`, pale granite `#C8CBCB`, lapped steel `#DBDFE2`, black granite `#0D1012`, chalk `#F2F5FB`. Typeface: Archivo (in `assets/fonts`).
+Website colours: white `#FFFFFF`, soft grey `#F1F2F3`, graphite `#14171B`, Volvac red `#C4161F`, deep red `#7E0C13`. Post and cover colours: red ground `#B0131D`, deep red `#5C0A10`, navy `#19385F`, pale granite `#C8CBCB`, lapped steel `#DBDFE2`, black granite `#0D1012`, chalk `#F2F5FB`. Typeface: Archivo (in `assets/fonts`).

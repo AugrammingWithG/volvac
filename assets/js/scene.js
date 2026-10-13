@@ -140,7 +140,7 @@
     })();
 
     var scene = new T.Scene();
-    var BG_INK = new T.Color(0x0c1f38), BG_STONE = new T.Color(0xd2d5d4), BG_BLACK = new T.Color(0x0a0b0d);
+    var BG_INK = new T.Color(0x2c0407), BG_STONE = new T.Color(opts.light ? 0xf1f2f3 : 0xd2d5d4), BG_BLACK = new T.Color(0x0a0b0d);
     scene.background = BG_INK.clone();
     scene.fog = new T.Fog(BG_INK.clone(), 42, 112);
 
@@ -308,8 +308,8 @@
       inkPaint: new T.MeshStandardMaterial({ color: 0x1f4c85, metalness: 0.25, roughness: 0.35 }),
       white: new T.MeshStandardMaterial({ color: 0xe4e7e9, metalness: 0.1, roughness: 0.4 }),
       brass: new T.MeshStandardMaterial({ color: 0xb9975a, metalness: 1, roughness: 0.3 }),
-      needle: new T.MeshStandardMaterial({ color: 0xd2121d, emissive: 0xb50f18, emissiveIntensity: 0.35, roughness: 0.5 }),
-      button: new T.MeshStandardMaterial({ color: 0xd2121d, emissive: 0xb50f18, emissiveIntensity: 0.35, roughness: 0.5 }),
+      needle: new T.MeshStandardMaterial({ color: 0xc41520, emissive: 0xa80f18, emissiveIntensity: 0.35, roughness: 0.5 }),
+      button: new T.MeshStandardMaterial({ color: 0xc41520, emissive: 0xa80f18, emissiveIntensity: 0.35, roughness: 0.5 }),
       glass: sheer(new T.MeshStandardMaterial({ color: 0xffffff, metalness: 1, roughness: 0.02, transparent: true, opacity: 0.13, depthWrite: false })),
       hoseBlue: new T.MeshStandardMaterial({ color: 0x1d4fc4, roughness: 0.55 }),
       hoseRed: new T.MeshStandardMaterial({ color: 0xc4281d, roughness: 0.55 }),
@@ -386,7 +386,7 @@
     /* The plate */
     var speck = speckleTexture();
     speck.repeat.set(44, 24);
-    var plate = new T.Mesh(new T.PlaneGeometry(440, 240), new T.MeshStandardMaterial({ color: 0xbfc3c3, map: speck, roughness: 0.46, metalness: 0 }));
+    var plate = new T.Mesh(new T.PlaneGeometry(440, 240), new T.MeshStandardMaterial({ color: opts.light ? 0xd9dcdd : 0xbfc3c3, map: speck, roughness: 0.46, metalness: 0 }));
     plate.rotation.x = -PI / 2; plate.position.set(110, 0, 0); plate.receiveShadow = true; scene.add(plate);
 
     // Engineer's blue: an opaque sheet where the plate has been wiped, and a narrow see-through strip where the
@@ -394,7 +394,7 @@
     var INK = { from: -112, to: 8.2, dry: 17.8 };
     function inkStuff(map, mask) {
       var m = new T.MeshStandardMaterial({
-        color: 0x143463, map: map, alphaMap: mask || null, transparent: !!mask, roughness: 0.36, metalness: 0.05,
+        color: 0x7c0a12, map: map, alphaMap: mask || null, transparent: !!mask, roughness: 0.36, metalness: 0.05,
         polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2
       });
       return mask ? sheer(m) : m;
@@ -886,6 +886,7 @@
       cp.lerpVectors(a.p, b.p, f); ct.lerpVectors(a.t, b.t, f);
       cp.y += Math.sin(f * PI) * a.lift;
       var sx = lerp(a.sx, b.sx, f) * (1 - portrait), sy = lerp(a.sy, b.sy, f) * (1 - portrait) + 0.27 * portrait;
+      if (view && view.sx != null) { sx = view.sx; sy = view.sy || 0; } // a page can place the object itself
 
       // Over the roster the camera leans toward the block whose row is under the pointer.
       hotMix += ((hot >= 0 ? 1 : 0) - hotMix) * Math.min(1, dt * 4);

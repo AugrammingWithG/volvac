@@ -39,15 +39,15 @@
 
   <section class="guide__part" id="logo" data-tone="steel">
     <h2>Logo</h2>
-    <p class="lede">A gauge ring with one live needle, then the name in expanded Archivo. The needle is always red. The ring and the name are always one colour: graphite on light grounds, chalk on dark ones.</p>
+    <p class="lede">A gauge ring with one live needle, then the name in expanded Archivo. The needle is red, and the ring and the name are one colour: graphite on light grounds, chalk on black. On Volvac red the whole logo is white.</p>
     <ul class="logos">
       <li data-tone="steel" style="background: var(--steel)">
         <img src="brand/volvac-logo-graphite.svg" alt="Volvac logo in graphite" width="252" height="48">
         <span>On light grounds</span>
       </li>
       <li data-tone="ink" style="background: var(--ink)">
-        <img src="brand/volvac-logo-chalk.svg" alt="Volvac logo in chalk" width="252" height="48">
-        <span>On Volvac navy</span>
+        <img src="brand/volvac-logo-white.svg" alt="Volvac logo in white" width="252" height="48">
+        <span>On Volvac red, all white</span>
       </li>
       <li data-tone="black" style="background: var(--black)">
         <img src="brand/volvac-logo-chalk.svg" alt="Volvac logo in chalk" width="252" height="48">
@@ -61,13 +61,15 @@
     <dl class="facts">
       <div><dt>Clear space</dt><dd>Keep a space the width of the ring's stroke times three on every side. Nothing enters it.</dd></div>
       <div><dt>Smallest size</dt><dd>Full logo 96px wide on screen. Below that, use the mark alone.</dd></div>
-      <div><dt>Never</dt><dd>Recolour the needle, put the logo on red, stretch it, outline it, or set the name in another typeface.</dd></div>
+      <div><dt>Never</dt><dd>Use the red needle on a red ground, stretch it, outline it, or set the name in another typeface.</dd></div>
       <div><dt>Files</dt><dd>
         <a href="brand/volvac-logo-graphite.png" download>Logo graphite PNG</a>,
         <a href="brand/volvac-logo-chalk.png" download>Logo chalk PNG</a>,
         <a href="brand/volvac-mark-graphite.png" download>Mark graphite PNG</a>,
         <a href="brand/volvac-mark-chalk.png" download>Mark chalk PNG</a>,
-        <a href="brand/volvac-avatar-ink.png" download>Avatar on navy PNG</a>.
+        <a href="brand/volvac-logo-white.png" download>Logo white PNG</a>,
+        <a href="brand/volvac-mark-white.png" download>Mark white PNG</a>,
+        <a href="brand/volvac-avatar-red.png" download>Avatar on red PNG</a>.
         SVG versions are in the <code>brand</code> folder and need the Archivo font installed.
       </dd></div>
     </dl>
@@ -75,16 +77,20 @@
 
   <section class="guide__part" id="colour" data-tone="stone">
     <h2>Colour</h2>
-    <p class="lede">Volvac's own red and navy, taken from the current logo and site, with two cool greys and a near-black. Navy is the brand at full size. Red is used sparingly, and only for a job.</p>
+    <p class="lede">Red is the brand at full size. It starts from the red of Volvac's current logo and is taken a step deeper and less orange, so it holds large areas without glare and keeps white text readable. Navy from the current site is the second colour, with two cool greys and a near-black.</p>
+    <dl class="facts">
+      <div><dt>On the website</dt><dd>The homepage is white-led, with red as the signal: white <code>#FFFFFF</code>, soft grey <code>#F1F2F3</code>, graphite text <code>#14171B</code>, mid grey <code>#555D67</code>, Volvac red <code>#C4161F</code> for the logo, buttons and marks, deep red <code>#7E0C13</code> for pressed states. Red covers about a tenth of a layout, and text on red is always white.</dd></div>
+      <div><dt>On posts and covers</dt><dd>Solid red grounds are for single strong moments such as a post or a cover. The values below are for those.</dd></div>
+    </dl>
     <ul class="swatches">
-      <li><i style="background: var(--ink)"></i><b>Volvac navy</b><code>#19385F</code><span>The brand colour. Main ground for covers, hero images and posts.</span></li>
-      <li><i style="background: var(--ink-deep)"></i><b>Deep ink</b><code>#0F2440</code><span>The darker navy behind and above the navy ground.</span></li>
-      <li><i style="background: var(--needle)"></i><b>Volvac red</b><code>#D2121D</code><span>Needles, buttons, and the mark of where you are. Never text, never a background.</span></li>
+      <li><i style="background: var(--ink)"></i><b>Volvac red</b><code>#B0131D</code><span>The brand colour. Main ground for covers, hero images and posts. On light grounds it is also the colour of buttons and needles.</span></li>
+      <li><i style="background: var(--ink-deep)"></i><b>Deep red</b><code>#5C0A10</code><span>The darker red behind and above the red ground, and the text on white buttons.</span></li>
+      <li><i style="background: var(--navy)"></i><b>Volvac navy</b><code>#19385F</code><span>Second colour. Details on equipment and in diagrams. Never a full ground.</span></li>
       <li><i style="background: var(--stone)"></i><b>Pale granite</b><code>#C8CBCB</code><span>Light ground for product and equipment posts.</span></li>
       <li><i style="background: var(--steel)"></i><b>Lapped steel</b><code>#DBDFE2</code><span>Lighter ground for documents and service content.</span></li>
       <li><i style="background: var(--black)"></i><b>Black granite</b><code>#0D1012</code><span>Dark ground for lists.</span></li>
-      <li><i style="background: var(--on-ink)"></i><b>Chalk</b><code>#F2F5FB</code><span>Text on navy, on black, and on anything red.</span></li>
-      <li><i style="background: var(--on-ink-2)"></i><b>Blue chalk</b><code>#C1D2EF</code><span>Secondary text on navy.</span></li>
+      <li><i style="background: var(--on-ink)"></i><b>Chalk</b><code>#F2F5FB</code><span>Text on red and on black. Also buttons and needles on a red ground.</span></li>
+      <li><i style="background: var(--on-ink-2)"></i><b>Rose chalk</b><code>#F8D6D6</code><span>Secondary text on red.</span></li>
       <li><i style="background: var(--on-stone)"></i><b>Graphite</b><code>#12161B</code><span>Text on the light grounds.</span></li>
       <li><i style="background: var(--on-stone-2)"></i><b>Soft graphite</b><code>#363E48</code><span>Secondary text on the light grounds.</span></li>
       <li><i style="background: var(--on-black-2)"></i><b>Ash</b><code>#A5ACB2</code><span>Secondary text on black.</span></li>
@@ -106,7 +112,7 @@
   <section class="guide__part" id="rules" data-tone="stone">
     <h2>Rules that hold it together</h2>
     <dl class="facts">
-      <div><dt>Red is live</dt><dd>Volvac red is for needles, things you press, and position marks. If it is decoration, remove it. Text on red is always chalk.</dd></div>
+      <div><dt>Red leads</dt><dd>Red is the ground of anything that carries the brand. On light and black grounds, red is kept for needles, things you press, and position marks. On a red ground those become chalk. Text on red is always chalk.</dd></div>
       <div><dt>One typeface</dt><dd>Archivo only. Capitals with wide tracking are for short condensed labels, never for headlines or sentences.</dd></div>
       <div><dt>Machined corners</dt><dd>Corners are 2px. No pills, no rounded cards. Circles only where a real object has one: a dial, a lamp, a punched hole.</dd></div>
       <div><dt>Hairlines, not boxes</dt><dd>Separate things with 1px lines in the text colour. No panels, no card grids, no drop shadows on text or shapes.</dd></div>
@@ -120,11 +126,11 @@
     <h2>Making a social post</h2>
     <p class="lede">Every post is one ground, one object, one headline. The <a href="social.html">social posts page</a> renders nine ready examples in portrait 1080 × 1350 and landscape 1200 × 627, and saves each as a PNG.</p>
     <dl class="facts">
-      <div><dt>Ground</dt><dd>Volvac navy for brand posts, pale granite for equipment, black granite for lists.</dd></div>
+      <div><dt>Ground</dt><dd>Volvac red for brand posts, pale granite for equipment, black granite for lists.</dd></div>
       <div><dt>Logo</dt><dd>Top left, chalk on dark grounds and graphite on light ones, with the margin equal on both sides.</dd></div>
       <div><dt>Headline</dt><dd>Expanded Archivo, sentence case, three lines at most.</dd></div>
       <div><dt>Body</dt><dd>One or two sentences in normal-width Archivo, in the secondary text colour.</dd></div>
-      <div><dt>Scale</dt><dd>The graduated scale runs down the right edge with one red index. It is the only red on the post besides needles and buttons on the equipment.</dd></div>
+      <div><dt>Scale</dt><dd>The graduated scale runs down the right edge with one index mark: red on light and black grounds, chalk on red.</dd></div>
       <div><dt>Foot</dt><dd>The web address in a condensed label, bottom left.</dd></div>
     </dl>
   </section>

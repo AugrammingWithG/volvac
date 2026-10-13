@@ -5,7 +5,7 @@
 
   var ORANGE = '#d2121d';
   var TONE = {
-    ink: { fg: '#f5f7fc', fg2: '#d3dcf7', tag: 'rgba(15,36,64,0.4)' },
+    ink: { fg: '#f5f7fc', fg2: '#f8d6d6', tag: 'rgba(70,0,6,0.35)' },
     stone: { fg: '#171a20', fg2: '#3d434d', tag: 'rgba(240,242,242,0.7)' },
     black: { fg: '#f5f7fc', fg2: '#b4b9c1', tag: 'rgba(0,0,0,0.3)' }
   };
@@ -127,6 +127,7 @@
   function draw(scene, post, f, index) {
     var c = document.createElement('canvas'); c.width = f.w; c.height = f.h;
     var x = c.getContext('2d'), tone = TONE[post.tone], portrait = f.id === 'portrait';
+    ORANGE = post.tone === 'ink' ? '#f2f5fb' : '#b0131d'; // on red, the live colour is chalk
     var o = pose(scene, post, f);
     o.w = f.w; o.h = f.h; o.ink = post.ink; o.act = post.act; o.needle = post.needle; if (o.loose == null) o.loose = post.loose;
     x.drawImage(scene.shot(o), 0, 0);
