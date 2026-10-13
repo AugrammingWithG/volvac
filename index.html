@@ -1,14 +1,14 @@
 <!doctype html>
-<html lang="en-AU">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Volvac | Quality machinery, measured and maintained</title>
-<meta name="description" content="Volvac has supplied quality machinery, measurement equipment and instrumentation since 2004, with systems manufacturing, repairs, calibration, certification and training.">
-<meta name="theme-color" content="#19385f">
-<link rel="icon" href="assets/img/mark.svg" type="image/svg+xml">
+<title>Volvac | Vacuum packaging and tray sealing machines</title>
+<meta name="description" content="Volvac builds vacuum packaging machines, tray sealers, dip tanks, shrink tunnels and slicers in Istanbul and exports them to over 42 countries.">
+<meta name="theme-color" content="#b0131d">
+<link rel="icon" href="assets/img/volvac/mini-logo.png" type="image/png">
 <link rel="preload" href="assets/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/volvac.css">
 <script>(function (d) { d.classList.add('js'); if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return; d.classList.add('intro'); setTimeout(function () { d.classList.remove('intro'); }, 4500); })(document.documentElement);</script>
 </head>
 <body>
@@ -16,23 +16,20 @@
 <a class="skip" href="#main">Skip to content</a>
 
 <canvas id="plate" aria-hidden="true"></canvas>
-<svg id="leader" aria-hidden="true"><line x1="0" y1="0" x2="0" y2="0"/><circle r="4"/></svg>
 
 <header class="bar" data-tone="ink">
-  <a class="mark" href="#top" aria-label="Volvac, home">
-    <svg viewBox="0 0 252 48" width="210" height="40" aria-hidden="true">
-      <circle cx="24" cy="24" r="17" fill="none" stroke="currentColor" stroke-width="7"/>
-      <path class="mark__needle" d="M22.2 23 L25.8 25.6 L34.5 11.5 Z"/>
-      <text x="54" y="38" font-size="34">VOLVAC</text>
-    </svg>
+  <a class="bar__logo" href="#top" aria-label="Volvac, home">
+    <img class="logo--white" src="assets/img/volvac/volvac-white.png" alt="Volvac" width="2299" height="531">
+    <img class="logo--red" src="assets/img/volvac/volvac-color.png" alt="" width="2299" height="531">
   </a>
   <nav class="bar__nav" aria-label="Primary">
-    <a href="#equipment">Equipment</a>
-    <a href="#makers">Makers</a>
-    <a href="#service">Service</a>
+    <a href="#range">Range</a>
+    <a href="#finder">Find a machine</a>
+    <a href="#machines">Machines</a>
+    <a href="#about">About</a>
     <a href="#contact">Contact</a>
   </nav>
-  <a class="btn btn--small" href="tel:+61451533197">Talk to sales</a>
+  <a class="btn btn--small" href="#contact">Get a quote</a>
 </header>
 
 <aside class="scale" data-tone="ink" aria-hidden="true">
@@ -43,175 +40,242 @@
 
 <main id="main">
 
-  <section class="stage stage--hero" id="top" data-tone="ink" data-key="0" data-side="left" data-name="Start">
+  <section class="stage stage--hero" id="top" data-tone="ink" data-key="0" data-side="left" data-name="Vacuum">
     <div class="stage__body">
-      <h1><span class="ln"><span>Quality machinery,</span></span> <span class="ln"><span>measured and</span></span> <span class="ln"><span>maintained.</span></span></h1>
-      <p class="lede">Since 2004, Volvac has supplied measurement equipment, instrumentation and production machinery to manufacturers, and stayed on to build, repair, calibrate and certify it.</p>
+      <h1><span class="ln"><span>Packaging solutions</span></span> <span class="ln"><span>that add value</span></span> <span class="ln"><span>to your brand.</span></span></h1>
+      <p class="lede">Volvac builds vacuum packaging and tray sealing machines in Istanbul, and ships them to food producers in over 42 countries.</p>
       <div class="actions">
-        <a class="btn" href="#contact">Talk to sales</a>
-        <button class="zero" type="button" id="zero" aria-describedby="zero-note">
-          <span class="zero__cap">Zero the indicator</span>
-          <output class="read" id="r-hero" aria-live="off">+0.000 mm</output>
-        </button>
+        <a class="btn" href="#finder">Find your machine</a>
+        <button class="run" type="button" data-run="5">Run a vacuum cycle</button>
       </div>
-      <p class="note" id="zero-note">Move across the screen to load the plunger. <span class="hint">Drag the plate sideways to turn it. </span>Reading is illustrative.</p>
+      <dl class="reads">
+        <div><dt>Chamber</dt><dd class="read" id="r-v">0.00 bar</dd></div>
+        <div><dt>Cycle</dt><dd class="read" id="r-s">Open</dd></div>
+      </dl>
+      <p class="note">A 3D model of a chamber vacuum machine. <span class="hint">Drag the plate to turn it, or press the red button on the machine. </span>Readings are illustrative.</p>
     </div>
-    <ul class="industries" aria-label="Industries served">
-      <li>Food processing</li><li>Packaging</li><li>Air conditioning</li><li>Refrigeration</li>
-      <li>Automotive</li><li>Appliance</li><li>Mining</li><li>General manufacturing</li>
-    </ul>
+    <img class="stage__photo" src="assets/img/volvac/w55-kopyasi.png" alt="" width="1000" height="1000">
+    <p class="scrollcue" aria-hidden="true">Scroll</p>
   </section>
 
-  <div id="equipment">
+  <div id="range">
 
-  <section class="stage" data-tone="stone" data-key="1" data-side="right" data-name="Leak and flow">
+  <section class="stage" data-tone="stone" data-key="1" data-side="right" data-name="Tray sealing">
     <div class="stage__body">
-      <h2>Leak, flow and pressure</h2>
-      <p>Leak detectors for automotive radiators, gas appliances, valves and medical devices. Flow measurement from 0.01&nbsp;ml/min to 20,000&nbsp;l/min, and pressure from 0.01&nbsp;Pa to 20&nbsp;kPa.</p>
-      <ul class="tags" aria-label="Makers">
-        <li><a href="https://www.qmisa.com/furness-controls/">Furness Controls</a></li>
-        <li><a href="https://www.qmisa.com/galileo/">Galileo TP</a></li>
-        <li><a href="https://www.qmisa.com/oak-europa-ramer/">OAK Europa (Ramer)</a></li>
+      <h2>Tray sealing</h2>
+      <p>From a manual sealer on the bench to an inline machine in the line. Manual, drawer, semi automatic, full automatic, inline and rotary models, and skin pack on the E series.</p>
+      <ul class="tags" aria-label="Models">
+        <li>PTS 83</li><li>E 42 PRO</li><li>E 35 PRO</li><li>E 30 PRO</li><li>W 850 VG</li><li>TS 450</li>
       </ul>
       <dl class="reads">
-        <div><dt>Test pressure</dt><dd class="read" id="r-leak-p">0.00 bar</dd></div>
-        <div><dt>Pressure decay</dt><dd class="read" id="r-leak-d">0.0 Pa/s</dd></div>
-        <div><dt>Result</dt><dd class="read" id="r-leak-r">Filling</dd></div>
+        <div><dt>Trays sealed</dt><dd class="read" id="r-tn">0 of 4</dd></div>
+        <div><dt>Cycle</dt><dd class="read" id="r-ts">Ready</dd></div>
       </dl>
       <div class="again">
-        <button class="run" type="button" data-run="1">Test again</button>
-        <p class="note">Illustrative readings from the model on the plate. <span class="hint">Drag the plate sideways to turn it.</span></p>
+        <button class="run" type="button" data-run="1">Seal again</button>
+        <a class="more" href="#finder" data-way="tray">See all tray sealers</a>
       </div>
+      <p class="note">Illustrative 3D model and readings.</p>
     </div>
+    <img class="stage__photo" src="assets/img/volvac/e42pro-thumb.png" alt="" width="1000" height="1000" loading="lazy">
   </section>
 
-  <section class="stage" data-tone="stone" data-key="2" data-side="left" data-name="Refrigeration">
+  <section class="stage" data-tone="stone" data-key="2" data-side="left" data-name="Dip and shrink">
     <div class="stage__body">
-      <h2>Refrigeration and air conditioning</h2>
-      <p>Evacuation systems, refrigerant charging machines and recovery units for production lines, with the manifolds, gauges, vacuum pumps, hoses and scales the service bench runs on.</p>
-      <ul class="tags" aria-label="Makers">
-        <li><a href="https://www.qmisa.com/galileo/">Galileo TP</a></li>
-        <li><a href="https://www.qmisa.com/wigam/">Wigam</a></li>
-        <li><a href="https://www.qmisa.com/supco/">Supco</a></li>
-        <li><a href="https://www.qmisa.com/imperial-tools/">Imperial Tools</a></li>
-        <li><a href="https://www.qmisa.com/gomax/">GOMAX</a></li>
+      <h2>Dip tank and shrink tunnel</h2>
+      <p>After the vacuum, the finish. The pack is dipped or passed through the tunnel so the film shrinks tight around the product, then dried.</p>
+      <ul class="tags" aria-label="Models">
+        <li>DT 650</li><li>ST75 shrink tunnel</li><li>DTR75 dry tunnel</li>
       </ul>
       <dl class="reads">
-        <div><dt>Low side</dt><dd class="read" id="r-ref-l">0.0 bar</dd></div>
-        <div><dt>High side</dt><dd class="read" id="r-ref-h">0.0 bar</dd></div>
-        <div><dt>Charge</dt><dd class="read" id="r-ref-c">0.000 kg</dd></div>
+        <div><dt>Water</dt><dd class="read" id="r-kt">0 °C</dd></div>
+        <div><dt>Cycle</dt><dd class="read" id="r-ks">Loaded</dd></div>
       </dl>
       <div class="again">
-        <button class="run" type="button" data-run="2">Charge again</button>
-        <p class="note">Illustrative readings from the model on the plate. <span class="hint">Drag the plate sideways to turn it.</span></p>
+        <button class="run" type="button" data-run="2">Dip again</button>
+        <a class="more" href="#finder" data-way="shrink">See dip and shrink</a>
       </div>
+      <p class="note">Illustrative 3D model and readings.</p>
     </div>
+    <img class="stage__photo" src="assets/img/volvac/st-75-thumb.png" alt="" width="1000" height="1000" loading="lazy">
   </section>
 
-  <section class="stage" data-tone="stone" data-key="3" data-side="right" data-name="Marking">
+  <section class="stage" data-tone="stone" data-key="3" data-side="right" data-name="Slicing">
     <div class="stage__body">
-      <h2>Marking and traceability</h2>
-      <p>Dot peen and laser marking stations that give every part a permanent identity: portable and wireless, on the bench, or built into the line.</p>
-      <ul class="tags" aria-label="Makers">
-        <li><a href="https://www.qmisa.com/technomark/">Technomark</a></li>
+      <h2>Automatic slicing</h2>
+      <p>Sliced first, then packed. The S 20 feeds, slices and lays the product out ready for the tray or the bag.</p>
+      <ul class="tags" aria-label="Models">
+        <li>S 20</li>
       </ul>
       <dl class="reads">
-        <div><dt>Marking</dt><dd class="read" id="r-mark-t">VOLVAC EST 2004</dd></div>
-        <div><dt>Dots struck</dt><dd class="read" id="r-mark-n">0</dd></div>
+        <div><dt>Slices</dt><dd class="read" id="r-sn">0</dd></div>
+        <div><dt>Blade</dt><dd class="read" id="r-sr">0 rpm</dd></div>
       </dl>
       <div class="again">
-        <button class="run" type="button" data-run="3">Mark again</button>
-        <p class="note">Illustrative model of a dot peen cycle. <span class="hint">Drag the plate sideways to turn it.</span></p>
+        <button class="run" type="button" data-run="3">Slice again</button>
+        <a class="more" href="#finder" data-way="slice">See slicing</a>
       </div>
+      <p class="note">Illustrative 3D model and readings.</p>
     </div>
-  </section>
-
-  <section class="stage" data-tone="stone" data-key="4" data-side="left" data-name="Balancing">
-    <div class="stage__body">
-      <h2>Balancing</h2>
-      <p>Turbocharger balancers and flow benches, automotive and industrial balancing machines, and field balancers for work on site, universal or built to the job.</p>
-      <ul class="tags" aria-label="Makers">
-        <li><a href="https://www.qmisa.com/cimat/">CIMAT</a></li>
-      </ul>
-      <dl class="reads">
-        <div><dt>Rotor speed</dt><dd class="read" id="r-bal-s">0 rpm</dd></div>
-        <div><dt>Residual unbalance</dt><dd class="read" id="r-bal-u">0.00 g·mm</dd></div>
-      </dl>
-      <div class="again">
-        <button class="run" type="button" data-run="4">Spin again</button>
-        <p class="note">Illustrative readings from the model on the plate. <span class="hint">Drag the plate sideways to turn it.</span></p>
-      </div>
-    </div>
-  </section>
-
-  <section class="stage" data-tone="stone" data-key="5" data-side="right" data-name="Packaging">
-    <div class="stage__body">
-      <h2>Processing and packaging</h2>
-      <p>Vacuum packaging machines, tray sealers, shrink tanks, slicers and tumblers in industrial-grade materials, for light duty and heavy duty lines alike.</p>
-      <ul class="tags" aria-label="Makers">
-        <li><a href="https://www.qmisa.com/volvac/">Volvac</a></li>
-      </ul>
-      <dl class="reads">
-        <div><dt>Chamber</dt><dd class="read" id="r-pack-v">0.00 bar</dd></div>
-        <div><dt>Cycle</dt><dd class="read" id="r-pack-s">Open</dd></div>
-      </dl>
-      <div class="again">
-        <button class="run" type="button" data-run="5">Pack again</button>
-        <p class="note">Illustrative readings from the model on the plate. <span class="hint">Drag the plate sideways to turn it.</span></p>
-      </div>
-    </div>
+    <img class="stage__photo" src="assets/img/volvac/s20-thumb.png" alt="" width="1000" height="1000" loading="lazy">
   </section>
 
   </div>
 
-  <section class="makers" id="makers" data-tone="black" data-name="Makers">
+  <section class="finder solid" id="finder" data-tone="black" data-name="Finder">
     <div class="wrap">
-      <h2>Ten makers.<br>One supplier.</h2>
-      <p class="makers__lede">Volvac represents specialist manufacturers and is the single point of contact for all of them: supply, spares and support.</p>
-      <ol class="rows">
-        <li><a href="https://www.qmisa.com/furness-controls/"><span class="rows__name">Furness Controls</span><span class="rows__what">Leak detection, flow measurement, micromanometers, calibrators</span></a></li>
-        <li><a href="https://www.qmisa.com/galileo/"><span class="rows__name">Galileo TP</span><span class="rows__what">Line leak detection, evacuation and refrigerant charging, vacuum pumps</span></a></li>
-        <li><a href="https://www.qmisa.com/gomax/"><span class="rows__name">GOMAX</span><span class="rows__what">Thermoplastic hose for medium to very high pressures</span></a></li>
-        <li><a href="https://www.qmisa.com/imperial-tools/"><span class="rows__name">Imperial Tools</span><span class="rows__what">Tube cutters, benders and flaring tools, manifolds and gauges</span></a></li>
-        <li><a href="https://www.qmisa.com/oak-europa-ramer/"><span class="rows__name">OAK Europa (Ramer)</span><span class="rows__what">Connectors and fittings for production leak testing</span></a></li>
-        <li><a href="https://www.qmisa.com/supco/"><span class="rows__name">Supco</span><span class="rows__what">Electronic test and service instruments, HVAC/R components</span></a></li>
-        <li><a href="https://www.qmisa.com/technomark/"><span class="rows__name">Technomark</span><span class="rows__what">Dot peen and laser marking, traceability</span></a></li>
-        <li><a href="https://www.qmisa.com/volvac/"><span class="rows__name">Volvac</span><span class="rows__what">Vacuum packaging, tray sealing, slicers, tumblers</span></a></li>
-        <li><a href="https://www.qmisa.com/wigam/"><span class="rows__name">Wigam</span><span class="rows__what">Recovery, vacuum and charging units, leak detectors, scales</span></a></li>
-        <li><a href="https://www.qmisa.com/cimat/"><span class="rows__name">CIMAT</span><span class="rows__what">Turbocharger, automotive and industrial balancing machines</span></a></li>
-      </ol>
-    </div>
-  </section>
-
-  <section class="service" id="service" data-tone="stone" data-name="Service">
-    <div class="wrap service__grid">
-      <div class="service__head">
-        <h2>The supplier that stays.</h2>
-        <p>Equipment is only as good as the number it gives you next year. Volvac backs what it sells with specialised sales and full technical service.</p>
+      <h2 class="rv">Find your machine</h2>
+      <p class="lede rv">Two choices narrow the whole range to the models that fit. Pick a model to start a quote.</p>
+      <div class="finder__ui" id="finder-ui" hidden>
+        <div class="pick">
+          <span class="pick__label" id="l-way">I want to pack</span>
+          <div class="pick__opts" id="f-ways" role="radiogroup" aria-labelledby="l-way"></div>
+        </div>
+        <div class="pick">
+          <span class="pick__label" id="l-scale">At this scale</span>
+          <div class="pick__opts" id="f-scales" role="radiogroup" aria-labelledby="l-scale"></div>
+        </div>
+        <div class="result" aria-live="polite">
+          <div class="result__list">
+            <p class="result__count" id="f-count"></p>
+            <ul class="models" id="f-models"></ul>
+            <a class="more" id="f-link" href="https://volvac.com.tr/en/machines-2/">See the range on volvac.com.tr</a>
+          </div>
+          <figure class="result__photo" id="f-photo" hidden>
+            <img id="f-img" src="assets/img/volvac/w55-kopyasi.png" alt="" width="1000" height="1000">
+            <figcaption id="f-cap"></figcaption>
+          </figure>
+        </div>
       </div>
-      <ul class="service__list">
-        <li><h3>Systems manufacturing</h3><p>Test and production systems built around the instruments we supply.</p></li>
-        <li><h3>Repairs</h3><p>Faults found and fixed by people who know the equipment.</p></li>
-        <li><h3>Calibration</h3><p>Instruments checked against a reference and brought back to true.</p></li>
-        <li><h3>Certification</h3><p>The paperwork that shows the reading can be trusted.</p></li>
-        <li><h3>Product training</h3><p>Your operators shown how to get the most from each machine.</p></li>
-        <li><h3>Stock and spare parts</h3><p>Parts held on the shelf so a stopped line starts again sooner.</p></li>
+      <dl class="rangelist" id="rangelist">
+        <div><dt>Vacuum packaging</dt><dd>Table top: W 51 XL, W 51, W 48, W 42, W 35 ML. Floor standing: W 104, W 68, W 48 H, W 52, W 51 H. Double chamber: W 100 PRO, W 86 PRO, W 72 PRO, W 55 PRO, W 100, W 86, W 72, W 55. Conveyor: W 135 C, W 110 C. Vertical: W 700.</dd></div>
+        <div><dt>Tray sealing</dt><dd>Manual: TS 450, TS 350. Drawer: E 52, E 26, TS 40, TS 52. Semi automatic: W 850 VG, W 650 VG, W 450 VG. Full automatic: PTS 83, E 42 PRO, E 42, E 35 PRO, E 35, E 30 PRO, E 30. Inline: E540, E680, E875, E1070. Rotary: E1070.</dd></div>
+        <div><dt>Skin pack</dt><dd>E 42 PRO, E 42, E 35 PRO, E 35, E 30 PRO, E 30, E 52.</dd></div>
+        <div><dt>Thermoform</dt><dd>W300.</dd></div>
+        <div><dt>Dip tank and shrink tunnel</dt><dd>DT 650, DTR75 dry tunnel, ST75 shrink tunnel.</dd></div>
+        <div><dt>Automatic slicing</dt><dd>S 20.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="band solid" data-tone="ink" data-name="Export" aria-label="Built in Istanbul, shipped to over 42 countries">
+    <p class="band__row" data-drift="-1" aria-hidden="true">W 55 PRO · E 42 PRO · PTS 83 · W 135 C · ST75 · S 20 · W 104 · E 35 PRO · W 51 XL · TS 450 · W 55 PRO · E 42 PRO · PTS 83 · W 135 C · ST75 · S 20 ·</p>
+    <h2 class="band__say rv">Built in Istanbul.<br>Shipped to over 42 countries.</h2>
+    <p class="band__row" data-drift="1" aria-hidden="true">USA · Russia · China · Germany · France · Israel · Pakistan · Ukraine · Egypt · USA · Russia · China · Germany · France · Israel · Pakistan · Ukraine · Egypt ·</p>
+  </section>
+
+  <section class="machines solid" id="machines" data-tone="steel" data-name="Machines">
+    <div class="wrap">
+      <h2 class="rv">Highlighted machines</h2>
+      <article class="machine">
+        <div class="machine__photo"><img data-px="0.08" src="assets/img/volvac/e42-pro.jpg" alt="Volvac E 42 PRO fully automatic tray sealing machine" width="1000" height="600" loading="lazy"></div>
+        <div class="machine__text rv">
+          <p class="machine__type">Fully automatic tray sealing</p>
+          <h3>E 42 PRO</h3>
+          <p>Ideal for high-volume production, and an excellent solution for large products thanks to its spacious dimensions.</p>
+          <button class="ask" type="button" data-model="E 42 PRO">Ask about the E 42 PRO</button>
+        </div>
+      </article>
+      <article class="machine machine--flip">
+        <div class="machine__photo"><img data-px="0.08" src="assets/img/volvac/w55-thumbnail.jpg" alt="Volvac W 55 double chamber vacuum packaging machine" width="1000" height="600" loading="lazy"></div>
+        <div class="machine__text rv">
+          <p class="machine__type">Double chamber vacuum packaging</p>
+          <h3>W 55</h3>
+          <p>Four sealing jaws of 55 cm each, so two vacuum bags can be placed at the same time. With 24 memory options, each process is defined once and reused.</p>
+          <button class="ask" type="button" data-model="W 55">Ask about the W 55</button>
+        </div>
+      </article>
+      <article class="machine">
+        <div class="machine__photo"><img data-px="0.08" src="assets/img/volvac/w135c.jpg" alt="Volvac W 135 C conveyor vacuum machine" width="1000" height="600" loading="lazy"></div>
+        <div class="machine__text rv">
+          <p class="machine__type">Conveyor vacuum machine</p>
+          <h3>W 135 C</h3>
+          <p>An ideal model for daily vacuuming operations, practical to use and ready for every packaging job.</p>
+          <button class="ask" type="button" data-model="W 135 C">Ask about the W 135 C</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="foods solid" id="foods" data-tone="stone" data-name="Applications">
+    <div class="wrap foods__grid">
+      <div class="foods__head">
+        <h2 class="rv">What are you packing?</h2>
+        <p class="lede rv">The right way to package your products is about both preserving freshness and presenting them well. Start from the food.</p>
+        <img class="rv" data-px="-0.1" src="assets/img/volvac/adsiz-tasarim-13-1.png" alt="Vacuum packed meat, sprouts and a sealed tray" width="1000" height="1000" loading="lazy">
+      </div>
+      <ul class="foods__list">
+        <li><a href="https://volvac.com.tr/en/3600-2/meat-and-meat-products-packaging/">Meat and meat products</a></li>
+        <li><a href="https://volvac.com.tr/en/3600-2/seafood-packaging/">Seafood</a></li>
+        <li><a href="https://volvac.com.tr/en/3600-2/dairy-products-packaging/">Dairy products</a></li>
+        <li><a href="https://volvac.com.tr/en/3600-2/ready-meal-packaging/">Ready meals</a></li>
+        <li><a href="https://volvac.com.tr/en/3600-2/fresh-food-salad-packaging/">Fresh food and salad</a></li>
+        <li><a href="https://volvac.com.tr/en/3600-2/bakery-products-sweets-packaging/">Bakery products and sweets</a></li>
+        <li><a href="https://volvac.com.tr/en/3600-2/olive-varieties-packaging/">Olive varieties</a></li>
+        <li><a href="https://volvac.com.tr/en/3600-2/nuts-snacks-packaging/">Nuts and snacks</a></li>
+        <li><a href="https://volvac.com.tr/en/3600-2/sauce-paste-puree-packaging/">Sauce, paste and puree</a></li>
       </ul>
     </div>
   </section>
 
-  <section class="stage stage--contact" id="contact" data-tone="ink" data-key="9" data-side="left" data-name="Contact">
-    <div class="stage__body">
-      <h2>Tell us what you need to test, mark, balance or pack.</h2>
-      <ul class="lines">
-        <li><span>Sales</span><a href="tel:+61451533197">+61 (0)45 153 3197</a></li>
-        <li><span>Technical support</span><a href="tel:+61482473400">+61 (0)48 247 3400</a></li>
-        <li><span>Email</span><a href="mailto:paulm@qmiau.com">paulm@qmiau.com</a></li>
+  <section class="about solid" id="about" data-tone="steel" data-name="About">
+    <div class="about__window"><img data-px="0.22" src="assets/img/volvac/volvac-fabrika.jpg" alt="The Volvac factory floor in Istanbul" width="1280" height="440" loading="lazy"></div>
+    <div class="wrap about__grid">
+      <div>
+        <h2 class="rv">Made in Istanbul, not resold.</h2>
+        <p class="lede rv">With 18 years of experience in packaging and food machinery, Volvac manufactures in its own factory and exports to over 42 countries.</p>
+        <p class="rv">Every machine is built with CNC technology under a zero-error principle, tested for CE and other international standards before sale, and designed for easy maintenance. After-sales support runs from installation to technical assistance.</p>
+      </div>
+      <ul class="facts rv">
+        <li><b>Own factory</b><span>ISO-standard manufacturing in Istanbul, close to Sabiha Gökçen Airport.</span></li>
+        <li><b>Certified</b><span>CE and other international quality certifications on every machine.</span></li>
+        <li><b>In stock</b><span>Vacuum machines, tray sealers, dip tanks and slicers kept in stock for timely delivery.</span></li>
+        <li><b>Supported</b><span>After-sales service from machine installation to technical assistance.</span></li>
       </ul>
+    </div>
+    <figure class="wrap founder rv">
+      <blockquote>"When we started as Volvac, our goal was to make the machines we produce in Turkey a symbol of trust and quality worldwide. Behind every machine we produce, there is meticulous R&amp;D work and a zero-defect target."</blockquote>
+      <figcaption>Volkan Bilgiç, Founder</figcaption>
+    </figure>
+  </section>
+
+  <section class="news solid" id="news" data-tone="black" data-name="News">
+    <div class="wrap">
+      <h2 class="rv">News from the fairs</h2>
+      <ul class="news__list rv">
+        <li><a href="https://volvac.com.tr/en/news/"><time>8 to 10 April 2025</time><b>Uzfood, Tashkent</b><span>One of the most important food trade shows in Central Asia.</span></a></li>
+        <li><a href="https://volvac.com.tr/en/news/"><time>23 to 26 October 2024</time><b>Eurasia Packaging Fair, Istanbul</b><span>Our latest packaging solutions at Tüyap.</span></a></li>
+        <li><a href="https://volvac.com.tr/en/news/"><time>11 to 14 October 2023</time><b>Eurasia Packaging Fair, Istanbul</b><span>Industry innovations at the Tüyap Fair and Congress Center.</span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="contact solid" id="contact" data-tone="ink" data-name="Contact">
+    <div class="wrap contact__grid">
+      <div>
+        <h2 class="rv">Tell us what you pack.</h2>
+        <p class="lede rv">Our engineers will suggest the machine that suits it.</p>
+        <ul class="lines rv">
+          <li><span>Sales and support</span><a href="tel:+902164411072">+90 216 441 10 72</a></li>
+          <li><span>Email</span><a href="mailto:info@volvac.com.tr">info@volvac.com.tr</a></li>
+          <li><span>Factory</span><address>Aydınlı KOSB Melek Aras Blv. No: 13/1<br>Tuzla, İstanbul, Türkiye</address></li>
+          <li><span>Hours</span><p>Monday to Friday, 07:30 to 17:30</p></li>
+          <li><span>Offices</span><p>Hannover, Germany. Minsk region, Belarus. Giza, Egypt.</p></li>
+        </ul>
+      </div>
+      <form class="quote rv" id="quote" action="mailto:info@volvac.com.tr" method="post" enctype="text/plain">
+        <label>Name<input type="text" name="name" id="q-name" autocomplete="name" required></label>
+        <label>Email<input type="email" name="email" autocomplete="email" required></label>
+        <label>Phone<input type="tel" name="phone" autocomplete="tel"></label>
+        <label>Machine or product<input type="text" name="machine" id="q-machine" placeholder="For example W 55, or sliced cheese"></label>
+        <label>Message<textarea name="message" rows="4"></textarea></label>
+        <button class="btn" type="submit">Send enquiry</button>
+        <p class="note">Sending opens your email app with the enquiry filled in.</p>
+      </form>
     </div>
     <footer class="foot">
-      <p>© 2026 Volvac. Est. 2004.</p>
-      <p>Brand and website concept by SocialHat. Not yet an official Volvac site.</p>
+      <p>Volvac Packaging Solutions.</p>
+      <p>Website concept by SocialHat. Not yet an official Volvac site. Photos and facts are from volvac.com.tr.</p>
     </footer>
   </section>
 
@@ -219,6 +283,6 @@
 
 <script src="assets/vendor/three.min.js"></script>
 <script src="assets/js/scene.js"></script>
-<script src="assets/js/site.js"></script>
+<script src="assets/js/home.js"></script>
 </body>
 </html>

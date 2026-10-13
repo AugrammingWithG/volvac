@@ -140,7 +140,7 @@
     })();
 
     var scene = new T.Scene();
-    var BG_INK = new T.Color(0x0c1f38), BG_STONE = new T.Color(0xd2d5d4), BG_BLACK = new T.Color(0x0a0b0d);
+    var BG_INK = new T.Color(0x2c0407), BG_STONE = new T.Color(opts.light ? 0xf1f2f3 : 0xd2d5d4), BG_BLACK = new T.Color(0x0a0b0d);
     scene.background = BG_INK.clone();
     scene.fog = new T.Fog(BG_INK.clone(), 42, 112);
 
@@ -308,8 +308,8 @@
       inkPaint: new T.MeshStandardMaterial({ color: 0x1f4c85, metalness: 0.25, roughness: 0.35 }),
       white: new T.MeshStandardMaterial({ color: 0xe4e7e9, metalness: 0.1, roughness: 0.4 }),
       brass: new T.MeshStandardMaterial({ color: 0xb9975a, metalness: 1, roughness: 0.3 }),
-      needle: new T.MeshStandardMaterial({ color: 0xd2121d, emissive: 0xb50f18, emissiveIntensity: 0.35, roughness: 0.5 }),
-      button: new T.MeshStandardMaterial({ color: 0xd2121d, emissive: 0xb50f18, emissiveIntensity: 0.35, roughness: 0.5 }),
+      needle: new T.MeshStandardMaterial({ color: 0xc41520, emissive: 0xa80f18, emissiveIntensity: 0.35, roughness: 0.5 }),
+      button: new T.MeshStandardMaterial({ color: 0xc41520, emissive: 0xa80f18, emissiveIntensity: 0.35, roughness: 0.5 }),
       glass: sheer(new T.MeshStandardMaterial({ color: 0xffffff, metalness: 1, roughness: 0.02, transparent: true, opacity: 0.13, depthWrite: false })),
       hoseBlue: new T.MeshStandardMaterial({ color: 0x1d4fc4, roughness: 0.55 }),
       hoseRed: new T.MeshStandardMaterial({ color: 0xc4281d, roughness: 0.55 }),
@@ -386,15 +386,15 @@
     /* The plate */
     var speck = speckleTexture();
     speck.repeat.set(44, 24);
-    var plate = new T.Mesh(new T.PlaneGeometry(440, 240), new T.MeshStandardMaterial({ color: 0xbfc3c3, map: speck, roughness: 0.46, metalness: 0 }));
+    var plate = new T.Mesh(new T.PlaneGeometry(440, 240), new T.MeshStandardMaterial({ color: opts.light ? 0xd9dcdd : 0xbfc3c3, map: speck, roughness: 0.46, metalness: 0 }));
     plate.rotation.x = -PI / 2; plate.position.set(110, 0, 0); plate.receiveShadow = true; scene.add(plate);
 
     // Engineer's blue: an opaque sheet where the plate has been wiped, and a narrow see-through strip where the
     // brush ran dry. Opaque, the sheet hides the stone under it, so the hero shades one ground and not two.
-    var INK = { from: -112, to: 8.2, dry: 17.8 };
+    var INK = { from: -112, to: opts.volvac ? 16 : 8.2, dry: 17.8 }; // Volvac: the red runs wider, so a phone never sees its edge behind the hero
     function inkStuff(map, mask) {
       var m = new T.MeshStandardMaterial({
-        color: 0x143463, map: map, alphaMap: mask || null, transparent: !!mask, roughness: 0.36, metalness: 0.05,
+        color: 0x7c0a12, map: map, alphaMap: mask || null, transparent: !!mask, roughness: 0.36, metalness: 0.05,
         polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2
       });
       return mask ? sheer(m) : m;
@@ -836,6 +836,128 @@
       lab.position.set(0, 0.5, 0.49); lab.renderOrder = 2; g.add(lab);
     })();
 
+    /* Volvac: the chamber machine moves to the red end of the plate, and three more of the range stand along it. */
+    var RUN = [[1, 1, 7, 0], [2, 2, 7, 0], [3, 3, 9, 0], [4, 4, 7, 1], [5, 5, 7, 0]]; // camera key, tick, seconds, always moving
+    if (opts.volvac) (function () {
+      function shown(o) { for (; o; o = o.parent) if (!o.visible) return false; return true; }
+      scene.children.forEach(function (c) {
+        if (!c.isGroup) return;
+        if (c.position.x === ST0 + GAP * 4) { c.position.x = 0; c.rotation.y = -0.2; } else c.visible = false;
+      });
+      targets = targets.filter(shown); press = press.filter(function (p) { return shown(p.o); });
+      RUN = [[0, 5, 7, 0], [1, 1, 9, 0], [2, 2, 8, 0], [3, 3, 8, 1]];
+      tick[4] = function () {};
+      state.trayN = 0; state.trayS = 'Ready'; state.traySettle = 0;
+      state.tankT = 0; state.tankS = 'Loaded'; state.tankSettle = 0;
+      state.sliceN = 0; state.sliceR = 0; state.sliceS = 'Ready'; state.sliceSettle = 0;
+      anchors[0] = V(0, 5.2, 1.5);
+
+      // 1. Tray sealer: trays index along the belt, the head comes down and seals each one
+      (function () {
+        var X = ST0, g = new T.Group(); g.position.set(X, 0, 0); g.rotation.y = 0.2; scene.add(g);
+        blob(g, 0, 0.3, 21, 9, 0.6);
+        [-6.6, 6.6].forEach(function (x) { [-1.7, 1.7].forEach(function (z) { g.add(at(rbox(0.5, 2.0, 0.5, 0.08, M.steel), x, 1.0, z)); }); });
+        g.add(at(rbox(16.4, 1.5, 4.4, 0.2, M.brushed), 0, 2.6, 0));
+        g.add(at(rbox(16.8, 0.14, 3.0, 0.05, M.rubber), 0, 3.42, 0));
+        [-1.72, 1.72].forEach(function (z) { g.add(at(rbox(16.8, 0.34, 0.18, 0.05, M.steel), 0, 3.62, z)); });
+        [-2.5, 2.5].forEach(function (x) { [-2.1, 2.1].forEach(function (z) { g.add(at(cyl(0.2, 0.2, 5.2, M.chrome, 20), x, 6.0, z)); }); });
+        g.add(at(rbox(5.8, 0.9, 5.0, 0.18, M.enamel), 0, 8.9, 0));
+        var head = at(rbox(4.5, 1.5, 3.7, 0.16, M.brushed), 0, 6.3, 0); g.add(head);
+        head.add(at(rbox(4.54, 0.24, 3.74, 0.04, M.needle), 0, -0.42, 0));
+        var roll = cyl(0.95, 0.95, 3.2, M.white, 40); roll.rotation.x = PI / 2; g.add(at(roll, -4.4, 6.4, 0));
+        [-1.75, 1.75].forEach(function (z) { g.add(at(rbox(0.22, 3.2, 0.22, 0.05, M.steel), -4.4, 5.0, z)); });
+        g.add(at(rbox(0.2, 3.4, 0.2, 0.05, M.steel), 5.6, 5.2, 2.3));
+        g.add(at(rbox(2.3, 1.5, 0.22, 0.08, M.black), 5.6, 7.3, 2.4));
+        var scr = new T.Mesh(new T.PlaneGeometry(1.9, 1.1), new T.MeshBasicMaterial({ color: 0x1f4c85, toneMapped: false })); g.add(at(scr, 5.6, 7.3, 2.53));
+        var btn = cyl(0.36, 0.36, 0.2, M.button, 24); btn.rotation.x = PI / 2; g.add(at(btn, 6.6, 2.7, 2.28));
+        pressable(1, btn, 'z', 0.08, 0.8);
+        var pitch = 3.5, trays = [];
+        for (var j = 0; j < 7; j++) {
+          var tr = new T.Group(); tr.add(at(rbox(2.3, 0.5, 2.6, 0.12, M.black), 0, 0.25, 0)); tr.add(at(rbox(1.6, 0.5, 1.9, 0.2, M.product), 0, 0.5, 0));
+          var lid = at(rbox(2.34, 0.06, 2.64, 0.02, M.film), 0, 0.55, 0); lid.castShadow = false; tr.add(lid); tr.lid = lid;
+          tr.position.y = 3.5; g.add(tr); trays.push(tr);
+        }
+        anchors[1] = V(X, 6.2, 1.6);
+        tick[1] = function (a) {
+          var steps = clamp(a, 0, 1) * 4, n = Math.min(4, Math.floor(steps)), f = a >= 1 ? 0 : steps - n;
+          var move = smoother(clamp((f - 0.5) / 0.5, 0, 1)), down = sstep(0.05, 0.2, f) - sstep(0.34, 0.48, f);
+          head.position.y = 6.3 - 1.86 * down; roll.rotation.y = -(n + move) * 0.9;
+          trays.forEach(function (t, j) {
+            var x = (n + move - j) * pitch; t.position.x = x; t.visible = Math.abs(x) < 7.4;
+            t.lid.visible = x > 0.2 || (j === n && f > 0.2) || (a >= 1 && j < 4);
+          });
+          state.trayN = a >= 1 ? 4 : Math.min(4, n + (f > 0.2 ? 1 : 0));
+          state.trayS = a >= 1 ? 'Ready' : f < 0.2 ? 'Closing' : f < 0.48 ? 'Sealing' : 'Indexing';
+          state.traySettle = a >= 1 ? 1 : 0;
+        };
+      })();
+
+      // 2. Dip tank: the pack is lowered into hot water and the film shrinks tight
+      (function () {
+        var X = ST0 + GAP, g = new T.Group(); g.position.set(X, 0, 0); g.rotation.y = -0.25; scene.add(g);
+        blob(g, 0, 0.3, 13, 10, 0.62);
+        g.add(at(rbox(7.4, 4.3, 5.4, 0.3, M.brushed), 0, 2.55, 0));
+        [-3.2, 3.2].forEach(function (x) { [-2.2, 2.2].forEach(function (z) { g.add(at(cyl(0.34, 0.38, 0.4, M.rubber, 20), x, 0.2, z)); }); });
+        g.add(at(rbox(6.6, 0.1, 4.6, 0.2, M.black), 0, 4.72, 0));
+        var water = new T.Mesh(new T.PlaneGeometry(6.2, 4.2), sheer(new T.MeshStandardMaterial({ color: 0x2a5f9a, metalness: 0.3, roughness: 0.06, transparent: true, opacity: 0.6, depthWrite: false })));
+        water.rotation.x = -PI / 2; g.add(at(water, 0, 4.8, 0));
+        [-2.9, 2.9].forEach(function (x) { g.add(at(cyl(0.2, 0.2, 5.6, M.chrome, 20), x, 7.4, -2.95)); });
+        g.add(at(rbox(6.6, 0.5, 0.6, 0.1, M.enamel), 0, 10.3, -2.95));
+        var lift = new T.Group(); g.add(lift);
+        lift.add(at(rbox(5.4, 0.16, 3.5, 0.05, M.steel), 0, 0, 0));
+        lift.add(at(rbox(6.2, 0.4, 0.5, 0.08, M.black), 0, 0.1, -2.9));
+        lift.add(at(rbox(0.4, 0.3, 1.5, 0.06, M.steel), 0, 0.05, -2.1));
+        lift.add(at(rbox(3.2, 1.1, 2.2, 0.3, M.product), 0, 0.65, 0.1));
+        var film = rbox(3.7, 1.3, 2.7, 0.45, M.film); film.castShadow = false; lift.add(at(film, 0, 0.7, 0.1));
+        var tg = dial({ r: 0.95, depth: 0.4, tex: gaugeTex(100, 20, '°C', '#f3f2ec', '#15181c') }); g.add(at(tg, -2.2, 2.7, 2.75));
+        var btn = cyl(0.42, 0.42, 0.25, M.button, 28); btn.rotation.x = PI / 2; g.add(at(btn, 2.3, 2.7, 2.75));
+        pressable(2, btn, 'z', 0.09, 0.8);
+        anchors[2] = V(X, 6.2, 1.2);
+        tick[2] = function (a, t) {
+          var dip = sstep(0.1, 0.35, a) - sstep(0.65, 0.9, a), k = sstep(0.36, 0.64, a);
+          lift.position.y = 7.3 - 3.2 * dip;
+          film.scale.set(1 - 0.1 * k, 1 - 0.13 * k, 1 - 0.14 * k);
+          state.tankT = 85 + Math.sin(t * 1.3) * 0.4;
+          tg.needle.rotation.z = -(-0.75 * PI + (state.tankT / 100) * 1.5 * PI);
+          state.tankS = a < 0.1 ? 'Loaded' : a < 0.35 ? 'Lowering' : a < 0.65 ? 'Dipping' : a < 0.9 ? 'Lifting' : 'Shrunk tight';
+          state.tankSettle = a >= 0.9 ? 1 : 0;
+        };
+      })();
+
+      // 3. Slicer: the blade spins, the loaf feeds through, slices shingle onto the tray
+      (function () {
+        var X = ST0 + GAP * 2, g = new T.Group(); g.position.set(X, 0, 0); g.rotation.y = -0.42; scene.add(g);
+        blob(g, 1, 0.3, 17, 9, 0.6);
+        g.add(at(rbox(5, 4.8, 4.4, 0.3, M.brushed), 1.6, 2.8, 0));
+        [-0.4, 3.6].forEach(function (x) { [-1.8, 1.8].forEach(function (z) { g.add(at(cyl(0.3, 0.34, 0.4, M.rubber, 20), x, 0.2, z)); }); });
+        g.add(at(rbox(6.4, 0.24, 2.4, 0.06, M.steel), -4.0, 3.5, 0));
+        [-6.8, -1.4].forEach(function (x) { g.add(at(rbox(0.3, 3.4, 0.3, 0.06, M.steel), x, 1.7, 0.9)); g.add(at(rbox(0.3, 3.4, 0.3, 0.06, M.steel), x, 1.7, -0.9)); });
+        g.add(at(rbox(5.6, 0.2, 3.0, 0.06, M.steel), 7.1, 1.7, 0));
+        [5.0, 9.2].forEach(function (x) { g.add(at(rbox(0.28, 1.6, 0.28, 0.06, M.steel), x, 0.8, 1.2)); g.add(at(rbox(0.28, 1.6, 0.28, 0.06, M.steel), x, 0.8, -1.2)); });
+        var blade = cyl(2.05, 2.05, 0.1, M.chrome, 72); blade.rotation.z = PI / 2;
+        var spin = new T.Group(); spin.add(blade); spin.add(at(rbox(0.3, 1.2, 0.3, 0.05, M.black), 0.1, 0, 0));
+        var hub = cyl(0.42, 0.42, 0.3, M.needle, 28); hub.rotation.z = PI / 2; spin.add(at(hub, 0.12, 0, 0)); g.add(at(spin, 4.2, 3.9, 0));
+        var loaf = rbox(5, 1.5, 1.5, 0.3, M.product); g.add(at(loaf, -2.5, 4.4, 0));
+        var slice = rbox(0.13, 1.5, 1.5, 0.05, M.product), N = 16, slices = new T.InstancedMesh(slice.geometry, M.product, N);
+        var mtx = new T.Matrix4(), q = new T.Quaternion().setFromEuler(new T.Euler(0, 0, -1.12)), one = V(1, 1, 1);
+        for (var i = 0; i < N; i++) { mtx.compose(V(5.2 + i * 0.27, 2.25, 0), q, one); slices.setMatrixAt(i, mtx); }
+        slices.castShadow = true; slices.receiveShadow = true; slices.count = 0; g.add(slices);
+        g.add(at(rbox(1.9, 1.2, 0.12, 0.08, M.black), 1.6, 3.6, 2.22));
+        var btn = cyl(0.36, 0.36, 0.22, M.button, 24); btn.rotation.x = PI / 2; g.add(at(btn, 1.6, 2.2, 2.26));
+        pressable(3, btn, 'z', 0.08, 0.8);
+        anchors[3] = V(X + 4.2, 4.6, 1.6);
+        var ang = 0;
+        tick[3] = function (a, t, dt) {
+          var up = sstep(0, 0.1, a) * (1 - sstep(0.93, 1, a)), L = 1 - 0.82 * clamp(a, 0, 1);
+          ang += dt * 34 * up; spin.rotation.x = ang;
+          loaf.scale.x = L; loaf.position.x = 0.1 - 2.5 * L;
+          slices.count = Math.min(N, Math.floor(clamp(a, 0, 1) * N + 0.001));
+          state.sliceN = slices.count; state.sliceR = Math.round(420 * up / 10) * 10;
+          state.sliceS = a >= 1 ? 'Done' : 'Slicing'; state.sliceSettle = a >= 1 ? 1 : 0;
+        };
+      })();
+    })();
+
     /* Camera keys: position, target, and where the object sits on screen - */
     function key(px, py, pz, tx, ty, tz, sx, sy, lift) { return { p: V(px, py, pz), t: V(tx, ty, tz), sx: sx, sy: sy || 0, lift: lift || 0 }; }
     var MKZ1 = MK.z0 + 9 * MK.dz;
@@ -850,6 +972,13 @@
       key(MK.x, 27, MKZ1 + 12, MK.x, 0, MKZ1 + 0.5, 0.27, 0, 14),
       key(SV.x + 4, 11, SV.z + 23, SV.x, 1.2, SV.z, -0.2, -0.16, 14),
       key(9.5, 7.2, 17, -0.4, 5.9, 0, 0.24, 0, 0)
+    ];
+    if (opts.volvac) K = [
+      key(9.5, 15.5, 32, 0, 4.4, 0, 0.25, 0, 6),
+      key(ST0 - 2, 15, 33, ST0, 4.2, 0, -0.235, 0, 6),
+      key(ST0 + GAP + 5, 15, 29, ST0 + GAP, 4.6, 0, 0.235, 0, 6),
+      key(ST0 + GAP * 2 - 1, 13.5, 29, ST0 + GAP * 2 + 2, 3.2, 0, -0.235, 0, 12),
+      key(ST0 + GAP * 2 + 14, 44, 30, ST0 + GAP * 2 + 14, 0, 4, 0, 0, 0)
     ];
     for (var s0 = 1; s0 <= 5; s0++) tick[s0](0, 0, 0);
 
@@ -902,10 +1031,11 @@
       k = clamp(k, 0, K.length - 1);
       inkTo(INK.to);
       var i = Math.min(Math.floor(k), K.length - 2), f = smoother(k - i), a = K[i], b = K[i + 1];
-      if (portrait > 0.5 && i + 1 === K.length - 1) b = K[0]; // on phones the contact view reuses the hero framing
+      if (portrait > 0.5 && i + 1 === K.length - 1 && !opts.volvac) b = K[0]; // on phones the contact view reuses the hero framing
       cp.lerpVectors(a.p, b.p, f); ct.lerpVectors(a.t, b.t, f);
       cp.y += Math.sin(f * PI) * a.lift;
       var sx = lerp(a.sx, b.sx, f) * (1 - portrait), sy = lerp(a.sy, b.sy, f) * (1 - portrait) + 0.27 * portrait;
+      if (view && view.sx != null) { sx = view.sx; sy = view.sy || 0; } // a page can place the object itself
 
       // Over the roster the camera leans toward the block whose row is under the pointer.
       hotMix += ((hot >= 0 ? 1 : 0) - hotMix) * Math.min(1, dt * 4);
@@ -948,12 +1078,12 @@
       state.hero = hero.v;
       state.heroSettle = Math.abs(hero.v) < 0.0015 && Math.abs(hero.vel) < 0.02 ? 1 : 0;
 
-      for (var s = 1; s <= 5; s++) {
-        var d = Math.abs(k - s);
-        if (d < 0.42) act[s] = Math.min(1, act[s] + dt / (s === 3 ? 9 : 7));
+      for (var r = 0; r < RUN.length; r++) {
+        var s = RUN[r][1], d = Math.abs(k - RUN[r][0]);
+        if (d < 0.42) act[s] = Math.min(1, act[s] + dt / RUN[r][2]);
         else if (d > 0.85) act[s] = 0;
         if (d < 1.2 && tick[s]) tick[s](act[s], clock, dt);
-        if (d < 1.2 && (act[s] !== shade.act[s] || (s === 4 && act[s] > 0))) { live = true; shade.act[s] = act[s]; }
+        if (d < 1.2 && (act[s] !== shade.act[s] || (RUN[r][3] && act[s] > 0 && act[s] < 1))) { live = true; shade.act[s] = act[s]; }
       }
 
       glow += (glowTo - glow) * Math.min(1, dt * 10);

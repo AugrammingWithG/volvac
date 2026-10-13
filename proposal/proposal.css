@@ -10,15 +10,15 @@
 @page { size: 297mm 210mm; margin: 0; }
 
 :root {
-  --ink: #19385f;
-  --ink-deep: #0f2440;
+  --ink: #b0131d;
+  --ink-deep: #5c0a10;
   --stone: oklch(0.84 0.004 200);
   --steel: oklch(0.9 0.006 240);
   --black: oklch(0.17 0.006 250);
-  --needle: #d2121d;
+  --needle: #b0131d;
 
   --on-ink: oklch(0.97 0.008 255);
-  --on-ink-2: oklch(0.86 0.045 262);
+  --on-ink-2: #f8d6d6;
   --on-stone: oklch(0.2 0.012 255);
   --on-stone-2: oklch(0.36 0.02 255);
   --on-black-2: oklch(0.74 0.012 250);
@@ -66,7 +66,7 @@ body {
 }
 .page:last-of-type { break-after: auto; }
 
-.page[data-tone="ink"] { --ground: var(--ink); --fg: var(--on-ink); --fg-2: var(--on-ink-2); --hair: oklch(0.97 0.008 255 / 0.3); }
+.page[data-tone="ink"] { --needle: var(--on-ink); --ground: var(--ink); --fg: var(--on-ink); --fg-2: var(--on-ink-2); --hair: oklch(0.97 0.008 255 / 0.3); }
 .page[data-tone="black"] { --ground: var(--black); --fg: var(--on-ink); --fg-2: var(--on-black-2); --hair: oklch(0.97 0.008 255 / 0.26); }
 .page[data-tone="stone"] { --ground: var(--stone); --fg: var(--on-stone); --fg-2: var(--on-stone-2); --hair: oklch(0.2 0.012 255 / 0.34); }
 .page[data-tone="steel"] { --ground: var(--steel); --fg: var(--on-stone); --fg-2: var(--on-stone-2); --hair: oklch(0.2 0.012 255 / 0.3); }

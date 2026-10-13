@@ -7,16 +7,18 @@
 }
 
 :root {
-  --ink: #19385f;
-  --ink-deep: #0f2440;
+  --ink: #b0131d;
+  --navy: #19385f;
+  --ink-deep: #5c0a10;
   --stone: oklch(0.84 0.004 200);
   --steel: oklch(0.9 0.006 240);
   --black: oklch(0.17 0.006 250);
-  --needle: #d2121d;
+  --needle: #b0131d;
+  --on-needle: var(--on-ink);
   --needle-press: #a90e17;
 
   --on-ink: oklch(0.97 0.008 255);
-  --on-ink-2: oklch(0.86 0.045 262);
+  --on-ink-2: #f8d6d6;
   --on-stone: oklch(0.2 0.012 255);
   --on-stone-2: oklch(0.36 0.02 255);
   --on-black-2: oklch(0.74 0.012 250);
@@ -29,7 +31,7 @@
   --fg-2: var(--on-stone-2);
 }
 
-[data-tone="ink"] { --fg: var(--on-ink); --fg-2: var(--on-ink-2); }
+[data-tone="ink"] { --fg: var(--on-ink); --fg-2: var(--on-ink-2); --needle: var(--on-ink); --needle-press: #dfe3ea; --on-needle: var(--ink-deep); }
 [data-tone="black"] { --fg: var(--on-ink); --fg-2: var(--on-black-2); }
 [data-tone="stone"], [data-tone="steel"] { --fg: var(--on-stone); --fg-2: var(--on-stone-2); }
 
@@ -55,7 +57,7 @@ body {
   caret-color: var(--needle);
 }
 
-::selection { background: var(--needle); color: var(--on-ink); }
+::selection { background: var(--needle); color: var(--on-needle); }
 
 h1, h2, h3, p, ul, ol, dl, dd { margin: 0; }
 ul, ol { padding: 0; list-style: none; }
@@ -73,7 +75,7 @@ a { color: inherit; }
   z-index: 50;
   padding: 0.75rem 1rem;
   background: var(--needle);
-  color: var(--on-ink);
+  color: var(--on-needle);
   font-weight: 700;
   text-decoration: none;
   transition: top 0.2s var(--ease);
@@ -181,7 +183,7 @@ a { color: inherit; }
   min-height: 3.25rem;
   padding: 0 1.6rem;
   background: var(--needle);
-  color: var(--on-ink);
+  color: var(--on-needle);
   font-stretch: 75%;
   font-weight: 700;
   font-size: 1rem;
@@ -308,7 +310,7 @@ h1 { font-size: clamp(2.2rem, 4.3vw, 4.6rem); }
   gap: 1rem;
   min-height: 3.25rem;
   padding: 0 1.1rem 0 1.3rem;
-  background: oklch(0.2 0.05 255 / 0.4);
+  background: oklch(0.25 0.1 25 / 0.45);
   color: var(--on-ink);
   border: 1px solid currentColor;
   border-radius: 2px;
@@ -316,7 +318,7 @@ h1 { font-size: clamp(2.2rem, 4.3vw, 4.6rem); }
   cursor: pointer;
   transition: background-color 0.25s ease, transform 0.35s var(--ease);
 }
-.zero:hover { background: oklch(0.2 0.05 255 / 0.75); transform: translateY(-2px); }
+.zero:hover { background: oklch(0.25 0.1 25 / 0.8); transform: translateY(-2px); }
 .zero:active { transform: translateY(0); }
 .zero__cap {
   font-stretch: 75%;
