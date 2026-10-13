@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Volvac: stages and costs</title>
+<link rel="stylesheet" href="proposal.css">
+</head>
+<body>
+
+<!--
+  To change a price or a duration, edit PLAN at the top of proposal.js. Every figure on every page,
+  the totals, the timeline and the table of invoices are filled in from it.
+  To make the PDF: open this file in Chrome or Edge, wait for the stills, then Print > Save as PDF
+  (A4 landscape is set by the page itself; turn "Background graphics" on, margins "None").
+-->
+
+<p class="warn" id="warn" hidden></p>
+
+<!-- Cover -->
+<section class="page page--cover" data-tone="ink" data-name="Start" data-still="cover">
+  <div class="body">
+    <h1>Stages<br>and costs</h1>
+    <p class="lede">The Volvac brand and website, from the concept you have seen to a live site. What happens at each stage, what each stage costs, and why.</p>
+    <p class="note">Prepared for Volvac by SocialHat, <span data-v="date"></span>.</p>
+    <p class="note">Stills throughout are taken from the concept homepage. Readings shown on instruments are illustrative.</p>
+  </div>
+</section>
+
+<!-- At a glance -->
+<section class="page" data-tone="steel" data-name="At a glance">
+  <div class="body body--wide">
+    <h2>Three stages, one a month.</h2>
+    <p class="lede">The concept is finished and cost you nothing. From here the work runs in three stages, one a month, at <span data-v="month.cost"></span> each. Each stage closes with something you can see and sign off, and the next stage is not started until you have approved it.</p>
+    <dl class="reads reads--big">
+      <div><dt>Implementation, three stages</dt><dd data-v="total"></dd></div>
+      <div><dt>Invoiced monthly</dt><dd><span data-v="months"></span> × <span data-v="month.cost"></span></dd></div>
+      <div><dt>Concept to live site</dt><dd><span data-v="months"></span> months</dd></div>
+    </dl>
+    <div class="rule" id="rule" aria-label="Timeline of the three stages"></div>
+  </div>
+</section>
+
+<!-- Why -->
+<section class="page" data-tone="steel" data-name="Why">
+  <div class="body body--wide">
+    <h2>Why it is staged,<br>and why in this order.</h2>
+    <ul class="grid">
+      <li>
+        <h3>Decisions come before production.</h3>
+        <p>Facts, structure and identity are settled first because every later stage is built on them. Changing a wordmark before the 3D is finished is a small job. Changing it afterwards is a large one.</p>
+      </li>
+      <li>
+        <h3>Each price is a count, not a guess.</h3>
+        <p>One homepage journey, ten maker pages, six services, two contact lines. The scope can be counted, so each stage can be fixed. If a stage runs long, that is our cost and not yours.</p>
+      </li>
+      <li>
+        <h3>The largest stage is already proven.</h3>
+        <p>3D production takes the most skilled hours and is what sets the site apart. The concept already models all six instrument groups and runs in a browser, so that stage finishes existing work instead of starting from nothing.</p>
+      </li>
+      <li>
+        <h3><span data-v="months.words.cap"></span> equal invoices.</h3>
+        <p>Each stage is one month and one invoice of <span data-v="month.cost"></span>, so the cost arrives evenly. Each stage ends on a sign-off, so you are never committed further than the stage you are in.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- Stage 0 -->
+<section class="page" data-tone="ink" data-name="Concept" data-still="inkplate">
+  <div class="body body--wide">
+    <div class="split">
+      <div>
+        <h2>Stage 0: the concept,<br>already delivered.</h2>
+        <p class="lede">Before asking for a decision we built the part that is usually argued about longest: what the brand looks like, and whether the idea works. You have now seen both.</p>
+        <dl class="reads">
+          <div><dt>Status</dt><dd>Complete</dd></div>
+          <div><dt>Cost to you</dt><dd data-v="zero"></dd></div>
+        </dl>
+      </div>
+      <dl class="rows">
+        <div><dt>What exists</dt><dd>A new wordmark, colour system and single typeface. A homepage in real 3D: one granite inspection plate carrying six instrument groups, each modelled in code and animated. Ten makers and six services laid out with wording drawn from your current site. Nine social posts, each in portrait and landscape.</dd></div>
+        <div><dt>Why no charge</dt><dd>The creative direction is our risk to take. It also means every price that follows is for building something you have already seen, not for exploring.</dd></div>
+      </dl>
+    </div>
+    <ul class="proofs" id="proofs" aria-label="Stills from the concept homepage"></ul>
+  </div>
+</section>
+
+<!-- Stage 1 -->
+<section class="page" data-tone="stone" data-name="Stage 1" data-still="mark" data-side="right">
+  <div class="body">
+    <h2>Stage 1: discovery and design</h2>
+    <dl class="reads">
+      <div><dt>Runs</dt><dd data-v="s1.runs"></dd></div>
+      <div><dt>Stage cost</dt><dd data-v="s1.cost"></dd></div>
+      <div><dt>Invoiced</dt><dd data-v="s1.month"></dd></div>
+    </dl>
+    <dl class="rows">
+      <div><dt>What happens</dt><dd>One working session with you, then we confirm the facts we could not verify from outside and settle the final wordmark and colours. Every page is then designed and written before anything is built, for desktop and phone, from your existing material and your corrections.</dd></div>
+      <div><dt>You receive</dt><dd>An agreed sitemap, final logo files and a short brand guide, and the whole site as a clickable outline you can read page by page, with final wording.</dd></div>
+      <div><dt>Why this cost</dt><dd>Decisions come first because they are cheapest to change here. The cost is the number of distinct layouts and the writing. Pages that share a template are designed once.</dd></div>
+      <div><dt>You sign off</dt><dd>The identity, the page designs and the wording.</dd></div>
+    </dl>
+  </div>
+  <p class="cap">From the concept: dot peen marking station</p>
+</section>
+
+<!-- Stage 2 -->
+<section class="page" data-tone="stone" data-name="Stage 2" data-still="balance" data-side="right">
+  <div class="body">
+    <h2>Stage 2: 3D production</h2>
+    <dl class="reads">
+      <div><dt>Runs</dt><dd data-v="s2.runs"></dd></div>
+      <div><dt>Stage cost</dt><dd data-v="s2.cost"></dd></div>
+      <div><dt>Invoiced</dt><dd data-v="s2.month"></dd></div>
+    </dl>
+    <dl class="rows">
+      <div><dt>What happens</dt><dd>The instrument groups from the concept are taken to production standard. Each model is checked against the real product it stands for and corrected where the concept took liberties. Animations are tuned, the page is made to run smoothly on an ordinary office laptop and a mid-range phone, and a still version is built for devices that cannot run 3D.</dd></div>
+      <div><dt>You receive</dt><dd>The finished 3D scene, running in a browser, to review on your own devices.</dd></div>
+      <div><dt>Why this cost</dt><dd>It is the most skilled work and the part no template can supply. It would be larger if the concept had not already modelled every instrument and proved the approach. What is left is accuracy, finish and speed.</dd></div>
+      <div><dt>You sign off</dt><dd>The models and the motion.</dd></div>
+    </dl>
+  </div>
+  <p class="cap">From the concept: turbocharger rotor on the balancer</p>
+</section>
+
+<!-- Stage 3 -->
+<section class="page" data-tone="stone" data-name="Stage 3" data-still="pack" data-side="right">
+  <div class="body">
+    <h2>Stage 3: build and launch</h2>
+    <dl class="reads">
+      <div><dt>Runs</dt><dd data-v="s3.runs"></dd></div>
+      <div><dt>Stage cost</dt><dd data-v="s3.cost"></dd></div>
+      <div><dt>Invoiced</dt><dd data-v="s3.month"></dd></div>
+    </dl>
+    <dl class="rows">
+      <div><dt>What happens</dt><dd>The approved designs become the working site, with enquiries routed to sales or to technical support and search setup in place. It is tested on phones, tablets and laptops, every address on the current site is redirected so existing links keep working, and the site goes live on your domain. We finish with a handover session for your team.</dd></div>
+      <div><dt>You receive</dt><dd>The live site, the redirect map, and handover notes.</dd></div>
+      <div><dt>Why this cost</dt><dd>Countable parts: the pages built from the approved designs, search setup, the test matrix and the redirect map from the old site.</dd></div>
+      <div><dt>You sign off</dt><dd>The complete site before it goes public, then go live.</dd></div>
+    </dl>
+  </div>
+  <p class="cap">From the concept: chamber vacuum packer</p>
+</section>
+
+<!-- After launch -->
+<section class="page" data-tone="stone" data-name="After launch" data-still="gauges" data-side="left">
+  <div class="body">
+    <h2><span data-v="care.free.words.cap"></span> months of care included</h2>
+    <p class="lede">A website runs on browsers, phones and search engines that keep changing, and someone should own that. <span data-v="care.pick.name"></span> is included for the first <span data-v="care.free.words"></span> months. After that, care is optional and monthly.</p>
+    <dl class="rows rows--plans" id="plans"></dl>
+    <p class="note"><span data-v="care.free.words.cap"></span> months of <span data-v="care.pick.name"></span> is worth <span data-v="care.free.value"></span>. A new site collects small requests in its first months, and this covers them without a quote each time.</p>
+  </div>
+  <p class="cap">From the concept: manifold gauge set and charging cylinder</p>
+</section>
+
+<!-- Options -->
+<section class="page" data-tone="black" data-name="Options" data-still="makers" data-side="left" data-cap="left">
+  <div class="body">
+    <h2>Options you can add at any sign-off</h2>
+    <p class="lede">None of these is needed to launch. Each has a flat price and can be added at a sign-off or after the site is live.</p>
+    <dl class="rows rows--plans" id="addons"></dl>
+  </div>
+  <p class="cap">From the concept: one engraved gauge block for each maker</p>
+</section>
+
+<!-- Figures -->
+<section class="page" data-tone="steel" data-name="Figures">
+  <div class="body body--wide">
+    <h2>How the <span data-v="months.words"></span> months add up</h2>
+    <p class="lede"><span data-v="months.words.cap"></span> invoices of <span data-v="month.cost"></span>, each issued when its month begins. Each invoice pays for one stage.</p>
+    <table class="tally" id="tally"></table>
+    <ul class="terms">
+      <li>Prices are in Australian dollars and exclude any taxes that may apply.</li>
+      <li>Each month is invoiced when it begins. The next month starts only after sign-off.</li>
+      <li>Timings assume feedback within two working days at each sign-off.</li>
+      <li><span data-v="care.pick.name"></span> is included for <span data-v="care.free.words"></span> months from launch. After that, care is optional.</li>
+      <li>Not included: photography or video, and fees charged by third parties such as domain registration and hosting.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Next step -->
+<section class="page page--cover" data-tone="ink" data-name="Next step" data-still="next">
+  <div class="body">
+    <h2>The next step<br>is stage 1.</h2>
+    <p class="lede"><span data-v="month.cost"></span> and <span data-v="month.weeks.words"></span> weeks. It ends with the whole site decided on paper: the sitemap, the finished identity, and every page designed and written. Once that is signed off, the site is <span data-v="months.after1"></span> months from live.</p>
+    <ul class="lines">
+      <li><span>To approve stage 1, or to ask anything</span><b>info@socialhat.com.au</b></li>
+      <li><span>Website</span><b>socialhat.com.au</b></li>
+    </ul>
+  </div>
+</section>
+
+<script src="../assets/vendor/three.min.js"></script>
+<script src="../assets/js/scene.js"></script>
+<script src="proposal.js"></script>
+</body>
+</html>
